@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<CubeBlocks>
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Straight_x1_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Straight x1</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Straight_x1.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="1" y="1" z="1"><X>1</X><Y>1</Y><Z>1</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Straight_x1_Large.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="1" />
+				<Component Subtype="Girder" Count="8" />
+				<Component Subtype="SteelPlate" Count="1" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Straight_x1_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Straight_x1_Large_Constr2.mwm" />
+			</BuildProgressModels>
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+				<MountPoints>
+				<MountPoint Side="Left" StartX="0.20" StartY="0.05" EndX="0.80" EndY="0.45" />
+				<MountPoint Side="Right" StartX="0.20" StartY="0.05" EndX="0.80" EndY="0.45" />
+				<MountPoint Side="Bottom" StartX="0.20" StartY="0.20" EndX="0.80" EndY="0.80" />
+				</MountPoints>
+			<BlockPairName>HoverRail_Straight_x1</BlockPairName>
+			<ExcludedAreaForCamera />
+		</Definition>
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Straight_x3_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Straight x3</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Straight_x3.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="3" y="1" z="1"><X>3</X><Y>1</Y><Z>1</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Straight_x3_Large.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="3" />
+				<Component Subtype="Girder" Count="24" />
+				<Component Subtype="SteelPlate" Count="3" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Straight_x3_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Straight_x3_Large_Constr2.mwm" />
+			</BuildProgressModels>
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+				<MountPoints>
+				<MountPoint Side="Left" StartX="0.20" StartY="0.05" EndX="0.80" EndY="0.45" />
+				<MountPoint Side="Right" StartX="0.20" StartY="0.05" EndX="0.80" EndY="0.45" />
+				<MountPoint Side="Bottom" StartX="0.19" StartY="0.20" EndX="2.81" EndY="0.80" />
+				</MountPoints>
+			<BlockPairName>HoverRail_Straight_x3</BlockPairName>
+			<ExcludedAreaForCamera />
+		</Definition>
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Straight_x10_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Straight x10</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Straight_x10.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="10" y="1" z="1"><X>10</X><Y>1</Y><Z>1</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Straight_x10_Large.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="10" />
+				<Component Subtype="Girder" Count="80" />
+				<Component Subtype="SteelPlate" Count="10" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Straight_x10_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Straight_x10_Large_Constr2.mwm" />
+			</BuildProgressModels>
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+				<MountPoints>
+				<MountPoint Side="Left" StartX="0.20" StartY="0.05" EndX="0.80" EndY="0.45" />
+				<MountPoint Side="Right" StartX="0.20" StartY="0.05" EndX="0.80" EndY="0.45" />
+				<MountPoint Side="Bottom" StartX="0.23" StartY="0.20" EndX="9.77" EndY="0.80" />
+				</MountPoints>
+			<BlockPairName>HoverRail_Straight_x10</BlockPairName>
+			<ExcludedAreaForCamera />
+		</Definition>
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Straight_x30_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Straight x30</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Straight_x30.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="30" y="1" z="1"><X>10</X><Y>1</Y><Z>1</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Straight_x30_Large.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="30" />
+				<Component Subtype="Girder" Count="240" />
+				<Component Subtype="SteelPlate" Count="30" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Straight_x30_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Straight_x30_Large_Constr2.mwm" />
+			</BuildProgressModels>
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+				<MountPoints>
+				<MountPoint Side="Left" StartX="0.20" StartY="0.01" EndX="0.80" EndY="0.19" />
+				<MountPoint Side="Right" StartX="0.20" StartY="0.01" EndX="0.80" EndY="0.19" />
+				<MountPoint Side="Bottom" StartX="0.21" StartY="0.20" EndX="29.79" EndY="0.80" />
+				</MountPoints>
+			<BlockPairName>HoverRail_Straight_x30</BlockPairName>
+			<ExcludedAreaForCamera />
+		</Definition>
+		<!--
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Curved_90_10x_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Curve 90° x10</DisplayName>
+			<Icon>Textures\Icons\HoverRail_Curved_90_10x.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="10" y="1" z="10"><X>10</X><Y>1</Y><Z>10</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail_Curved_90_10x_Large.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="3" />
+				<Component Subtype="Girder" Count="24" />
+				<Component Subtype="SteelPlate" Count="3" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+			<MountPoints>
+				<MountPoint Side="Back" StartX="0.20" StartY="0.03" EndX="0.80" EndY="0.27" />
+				<MountPoint Side="Right" StartX="9.20" StartY="0.03" EndX="9.80" EndY="0.27" />
+				<MountPoint Side="Bottom" StartX="0.24" StartY="7.53" EndX="0.96" EndY="9.87" />
+				<MountPoint Side="Bottom" StartX="0.34" StartY="5.44" EndX="1.86" EndY="7.56" />
+				<MountPoint Side="Bottom" StartX="1.24" StartY="3.63" EndX="2.76" EndY="5.57" />
+				<MountPoint Side="Bottom" StartX="2.21" StartY="2.72" EndX="4.19" EndY="4.08" />
+				<MountPoint Side="Bottom" StartX="3.36" StartY="1.17" EndX="5.34" EndY="2.73" />
+				<MountPoint Side="Bottom" StartX="5.31" StartY="0.32" EndX="7.29" EndY="1.88" />
+				<MountPoint Side="Bottom" StartX="7.27" StartY="0.21" EndX="9.83" EndY="0.99" />
+			</MountPoints>
+			<BlockPairName>HoverRail_Curved_90_10x</BlockPairName>
+			<Center x="0" y="0" z="0" />
+			<ExcludedAreaForCamera />
+		</Definition>
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Curved_90_12x_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Curve 90° x10</DisplayName>
+			<Icon>Textures\Icons\HoverRail_Curved_90_12x.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="12" y="1" z="12"><X>12</X><Y>1</Y><Z>12</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail_Curved_90_12x_Large.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="3" />
+				<Component Subtype="Girder" Count="24" />
+				<Component Subtype="SteelPlate" Count="3" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+			<BlockPairName>HoverRail_Curved_90_12x</BlockPairName>
+			<Center x="0" y="0" z="0" />
+			<ExcludedAreaForCamera />
+		</Definition>
+		-->
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Curved_90_10x-12x_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Curved 90° x10+x12</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Curved_90_10x-12x.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="12" y="1" z="12"><X>12</X><Y>1</Y><Z>12</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Curved_90_10x-12x_Large.mwm</Model>
+			<!-- factor of 36 -->
+			<Components>
+				<Component Subtype="SteelPlate" Count="36" />
+				<Component Subtype="Girder" Count="288" />
+				<Component Subtype="SteelPlate" Count="36" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+			<MountPoints>
+				<MountPoint Side="Bottom" StartX="3.25" StartY="5.66" EndX="4.75" EndY="7.54" />
+				<MountPoint Side="Back" StartX="2.20" StartY="0.03" EndX="2.80" EndY="0.27" />
+				<MountPoint Side="Bottom" StartX="2.35" StartY="7.46" EndX="3.85" EndY="9.54" />
+				<MountPoint Side="Right" StartX="9.20" StartY="0.03" EndX="9.80" EndY="0.27" />
+				<MountPoint Side="Bottom" StartX="2.24" StartY="9.55" EndX="2.96" EndY="11.85" />
+				<MountPoint Side="Back" StartX="0.20" StartY="0.03" EndX="0.80" EndY="0.27" />
+				<MountPoint Side="Right" StartX="11.20" StartY="0.03" EndX="11.80" EndY="0.27" />
+				<MountPoint Side="Bottom" StartX="4.23" StartY="4.75" EndX="6.17" EndY="6.05" />
+				<MountPoint Side="Bottom" StartX="5.37" StartY="3.16" EndX="7.31" EndY="4.74" />
+				<MountPoint Side="Bottom" StartX="7.32" StartY="2.30" EndX="9.26" EndY="3.88" />
+				<MountPoint Side="Bottom" StartX="9.28" StartY="2.20" EndX="11.80" EndY="2.98" />
+				<MountPoint Side="Bottom" StartX="8.87" StartY="0.12" EndX="12.01" EndY="0.86" />
+				<MountPoint Side="Bottom" StartX="5.77" StartY="0.31" EndX="8.91" EndY="1.87" />
+				<MountPoint Side="Bottom" StartX="3.52" StartY="1.16" EndX="5.86" EndY="3.02" />
+				<MountPoint Side="Bottom" StartX="2.25" StartY="2.98" EndX="4.31" EndY="4.32" />
+				<MountPoint Side="Bottom" StartX="0.85" StartY="4.31" EndX="2.71" EndY="6.59" />
+				<MountPoint Side="Bottom" StartX="0.18" StartY="6.59" EndX="2.04" EndY="9.19" />
+				<MountPoint Side="Bottom" StartX="0.10" StartY="9.19" EndX="1.02" EndY="11.97" />
+			</MountPoints>
+			<BlockPairName>HoverRail_Curved_90_10x-12x</BlockPairName>
+			<Center x="0" y="0" z="0" />
+			<ExcludedAreaForCamera />
+		</Definition>
+
+		<Definition xsi:type="MyObjectBuilder_TerminalBlockDefinition">
+			<Id>
+				<TypeId>TerminalBlock</TypeId>
+				<SubtypeId>HoverRail_Engine_Large</SubtypeId>
+			</Id>
+			<DisplayName>HoverRail Maglev Engine</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Engine.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="1" y="1" z="1"><X>1</X><Y>1</Y><Z>1</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Engine_Large.mwm</Model>
+			<Components>
+			<Component Subtype="SteelPlate" Count="10" />
+			<Component Subtype="Computer" Count="50" />
+			<Component Subtype="Superconductor" Count="50" />
+			<Component Subtype="Construction" Count="20" />
+			<Component Subtype="SteelPlate" Count="40" />
+			</Components>
+			<CriticalComponent Subtype="Computer" Index="0" />
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+				<MountPoints>
+				<MountPoint Side="Front" StartX="0.20" StartY="0.20" EndX="0.80" EndY="0.80" />
+				<MountPoint Side="Back" StartX="0.20" StartY="0.20" EndX="0.80" EndY="0.80" />
+				<MountPoint Side="Left" StartX="0.20" StartY="0.20" EndX="0.80" EndY="0.80" />
+				<MountPoint Side="Right" StartX="0.20" StartY="0.20" EndX="0.80" EndY="0.80" />
+				<MountPoint Side="Top" StartX="0.20" StartY="0.20" EndX="0.80" EndY="0.80" />
+				</MountPoints>
+			<BlockPairName>HoverRail_Engine</BlockPairName>
+			<ExcludedAreaForCamera />
+		</Definition>
+	</CubeBlocks>
+</Definitions>
