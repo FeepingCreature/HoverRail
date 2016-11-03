@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Sandbox.ModAPI;
 using Sandbox.ModAPI.Interfaces.Terminal;
 using Sandbox.Common;
@@ -13,8 +14,11 @@ using VRageMath;
 namespace HoverRail {
 	[MyEntityComponentDescriptor(typeof(MyObjectBuilder_TerminalBlock), "HoverRail_Engine_Large")]
 	public class HoverRailEngine : MyGameLogicComponent {
+		const float MAX_POWER_USAGE_MW = 1f;
+		const float FORCE_POWER_COST_MW_N = 0.0000001f;
 		Sandbox.Common.ObjectBuilders.MyObjectBuilder_EntityBase objectBuilder = null;
 		SlidingAverageVector avgGuidance, avgCorrectF, avgDampenF;
+		MyResourceSinkComponent sinkComp;
 		bool block_initialized = false;
         public override void Init(Sandbox.Common.ObjectBuilders.MyObjectBuilder_EntityBase objectBuilder) {
 			this.avgGuidance = new SlidingAverageVector(0.2);
@@ -24,40 +28,55 @@ namespace HoverRail {
 			this.objectBuilder = objectBuilder;
 			this.id = HoverRailEngine.attachcount++;
 			// MyLog.Default.WriteLine(String.Format("ATTACH TO OBJECT {0}", this.id));
+			InitPowerComp();
+		}
+		
+		void EngineCustomInfo(IMyTerminalBlock block, StringBuilder builder) {
+			builder.AppendLine(String.Format("Required Power: {0}W", EngineUI.SIFormat(power_usage * 1000000)));
+			builder.AppendLine(String.Format("Max Required Power: {0}W", EngineUI.SIFormat(MAX_POWER_USAGE_MW * 1000000)));
+		}
+		
+		// init power usage
+		void InitPowerComp() {
+            Entity.Components.TryGet<MyResourceSinkComponent>(out sinkComp);
+            if (sinkComp == null) {
+                // MyLog.Default.WriteLine("set up new power sink");
+                sinkComp = new MyResourceSinkComponent();
+                sinkComp.Init(
+                    MyStringHash.GetOrCompute("Thrust"),
+                    MAX_POWER_USAGE_MW,
+                    GetCurrentPowerDraw
+                );
+                Entity.Components.Add(sinkComp);
+            }
+            else
+            {
+                // MyLog.Default.WriteLine("reuse existing power sink");
+                sinkComp.SetRequiredInputFuncByType(MyResourceDistributorComponent.ElectricityId, GetCurrentPowerDraw);
+            }
+			(Entity as IMyTerminalBlock).AppendingCustomInfo += EngineCustomInfo;
 		}
 		
 		float power_usage = 0.0f;
-		MyResourceSinkComponent sinkComp;
+		float power_ratio_available = 1.0f;
 		float GetCurrentPowerDraw() {
 			// MyLog.Default.WriteLine(String.Format("report power usage as {0}", power_usage));
 			return power_usage;
 		}
-		public void UpdatePowerUsage(float force) {
-			power_usage = force;
-			// sinkComp.Update();
+		public void UpdatePowerUsage(float new_power) {
+			if (power_usage == new_power) return;
+			power_ratio_available = 1.0f;
+			if (new_power > MAX_POWER_USAGE_MW) {
+				power_ratio_available = MAX_POWER_USAGE_MW / new_power;
+				new_power = MAX_POWER_USAGE_MW;
+			}
+			// MyLog.Default.WriteLine(String.Format("set power to {0}", new_power));
+			power_usage = new_power;
+			sinkComp.Update();
 		}
 		
 		public void InitLate() {
 			block_initialized = true;
-			
-			// init power usage
-			// disabled! because it does not work.
-			/* 
-			Entity.Components.TryGet<MyResourceSinkComponent>(out sinkComp);
-			if (sinkComp == null) {
-				MyLog.Default.WriteLine("set up new power sink");
-				sinkComp = new MyResourceSinkComponent();
-				sinkComp.Init(
-					MyStringHash.GetOrCompute("Maglev"),
-					45000000,
-					GetCurrentPowerDraw
-				);
-				Entity.Components.Add(sinkComp);
-			} else {
-				MyLog.Default.WriteLine("reuse existing power sink");
-				sinkComp.SetRequiredInputFuncByType(MyResourceDistributorComponent.ElectricityId, GetCurrentPowerDraw);
-			}
-			*/
 			
 			if (!EngineUI.initialized) EngineUI.InitLate();
 		}
@@ -88,7 +107,20 @@ namespace HoverRail {
 			
 			frame++;
 			
-			if (!(bool) SettingsStore.Get(Entity, "power_on", true)) return;
+			if (frame % 10 == 0) (Entity as IMyTerminalBlock).RefreshCustomInfo();
+			
+			if (!(bool) SettingsStore.Get(Entity, "power_on", true)) {
+				UpdatePowerUsage(0);
+				return;
+			}
+			
+			// this will be one frame late ... but close enough??
+			// power requested that can be satisfied by the network * power required that can be requested given our max
+			float power_ratio = sinkComp.SuppliedRatioByType(MyResourceDistributorComponent.ElectricityId) * power_ratio_available;
+			if (!sinkComp.IsPoweredByType(MyResourceDistributorComponent.ElectricityId)) {
+				power_ratio = 0;
+			}
+			// MyLog.Default.WriteLine(String.Format("power ratio is {0}", power_ratio));
 			
 			double forceLimit = (double) (float) SettingsStore.Get(Entity, "force_slider", 100000.0f);
 			
@@ -99,7 +131,10 @@ namespace HoverRail {
 			var guidance = new Vector3D(0, 0, 0);
 			if (activeRailGuide == null || !activeRailGuide.getGuidance(hoverCenter, ref guidance)) {
 				this.LookForNewRail(searchCenter, hoverCenter);
-				if (activeRailGuide == null) return;
+				if (activeRailGuide == null) {
+					UpdatePowerUsage(0);
+					return;
+				}
 				activeRailGuide.getGuidance(hoverCenter, ref guidance); // guaranteed to succeed (once)
 			}
 			
@@ -122,7 +157,7 @@ namespace HoverRail {
 				var guidanceForce = forceLimit * Vector3D.Normalize(guidance) * factor;
 				this.avgCorrectF.update(guidanceForce);
 				DebugDraw.Sphere(searchCenter + this.avgCorrectF.value * 0.000001f, 0.1f, Color.Yellow);
-				activeRailGuide.applyForces(Entity, this.avgCorrectF.value);
+				activeRailGuide.applyForces(Entity, this.avgCorrectF.value * power_ratio);
 				force_magnitude += (float) this.avgCorrectF.value.Length();
 			}
 			// dampening force, reduces oscillation over time
@@ -135,11 +170,11 @@ namespace HoverRail {
 				var dampenForce = forceLimit * 0.5 * dF * factor; // separate slider?
 				this.avgDampenF.update(dampenForce);
 				DebugDraw.Sphere(searchCenter + this.avgDampenF.value * 0.000001f, 0.1f, Color.Red);
-				activeRailGuide.applyForces(Entity, this.avgDampenF.value);
-				force_magnitude += (float) this.avgCorrectF.value.Length();
+				activeRailGuide.applyForces(Entity, this.avgDampenF.value * power_ratio);
+				force_magnitude += (float) this.avgDampenF.value.Length();
 			}
 			this.avgGuidance.update(guidance);
-			UpdatePowerUsage(force_magnitude);
+			UpdatePowerUsage(force_magnitude * FORCE_POWER_COST_MW_N);
 		}
 		public override MyObjectBuilder_EntityBase GetObjectBuilder(bool copy = false) {
 			return objectBuilder;
@@ -161,12 +196,12 @@ namespace HoverRail {
 			return (float) (logbase * frac);
 		}
 		public static string SIFormat(float f) {
-			if (f > 1000000000) return String.Format("{0}G", Math.Round(f / 1000000000, 2));
-			if (f > 1000000) return String.Format("{0}M", Math.Round(f / 1000000, 2));
-			if (f > 1000) return String.Format("{0}K", Math.Round(f / 1000, 2));
-			if (f > 1) return String.Format("{0}", Math.Round(f, 2));
-			if (f > 0.0001) return String.Format("{0}m", Math.Round(f * 1000, 2));
-			if (f > 0.0000001) return String.Format("{0}n", Math.Round(f * 1000000, 2));
+			if (f >= 1000000000) return String.Format("{0}G", Math.Round(f / 1000000000, 2));
+			if (f >= 1000000) return String.Format("{0}M", Math.Round(f / 1000000, 2));
+			if (f >= 1000) return String.Format("{0}K", Math.Round(f / 1000, 2));
+			if (f >= 1) return String.Format("{0}", Math.Round(f, 2));
+			if (f >= 0.0001) return String.Format("{0}m", Math.Round(f * 1000, 2));
+			if (f >= 0.0000001) return String.Format("{0}n", Math.Round(f * 1000000, 2));
 			// give up
 			return String.Format("{0}", f);
 		}
@@ -186,7 +221,7 @@ namespace HoverRail {
 			forceSlider = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlSlider, IMyTerminalBlock>( "HoverRail_ForceLimit" );
 			forceSlider.Title   = MyStringId.GetOrCompute("Force Limit");
 			forceSlider.Tooltip = MyStringId.GetOrCompute("The amount of force applied to align this motor with the track.");
-			forceSlider.SetLogLimits(10000.0f, 50000000.0f);
+			forceSlider.SetLogLimits(10000.0f, 40000000.0f);
 			forceSlider.SupportsMultipleBlocks = true;
 			forceSlider.Getter  = b => (float) SettingsStore.Get(b, "force_slider", 100000.0f);
 			forceSlider.Setter  = (b, v) => SettingsStore.Set(b, "force_slider", (float) LogRound(v));
