@@ -65,6 +65,7 @@
 				<MountPoint Side="Bottom" StartX="0.19" StartY="0.20" EndX="2.81" EndY="0.80" />
 				</MountPoints>
 			<BlockPairName>HoverRail_Straight_x3</BlockPairName>
+			<Center x="0" y="0" z="0" />
 			<ExcludedAreaForCamera />
 		</Definition>
 		<Definition>
@@ -98,6 +99,7 @@
 				<MountPoint Side="Bottom" StartX="0.23" StartY="0.20" EndX="9.77" EndY="0.80" />
 				</MountPoints>
 			<BlockPairName>HoverRail_Straight_x10</BlockPairName>
+			<Center x="0" y="0" z="0" />
 			<ExcludedAreaForCamera />
 		</Definition>
 		<Definition>
@@ -109,7 +111,7 @@
 			<Icon>Textures\Icons\HoverRail\HoverRail_Straight_x30.dds</Icon>
 			<CubeSize>Large</CubeSize>
 			<BlockTopology>TriangleMesh</BlockTopology>
-			<Size x="30" y="1" z="1"><X>10</X><Y>1</Y><Z>1</Z></Size>
+			<Size x="30" y="1" z="1"><X>30</X><Y>1</Y><Z>1</Z></Size>
 			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
 			<Model>Models\HoverRail\HoverRail_Straight_x30_Large.mwm</Model>
 			<Components>
@@ -131,6 +133,7 @@
 				<MountPoint Side="Bottom" StartX="0.21" StartY="0.20" EndX="29.79" EndY="0.80" />
 				</MountPoints>
 			<BlockPairName>HoverRail_Straight_x30</BlockPairName>
+			<Center x="0" y="0" z="0" />
 			<ExcludedAreaForCamera />
 		</Definition>
 		<!--
@@ -256,11 +259,11 @@
 			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
 			<Model>Models\HoverRail\HoverRail_Engine_Large.mwm</Model>
 			<Components>
-			<Component Subtype="SteelPlate" Count="10" />
-			<Component Subtype="Computer" Count="50" />
-			<Component Subtype="Superconductor" Count="50" />
-			<Component Subtype="Construction" Count="20" />
 			<Component Subtype="SteelPlate" Count="40" />
+			<Component Subtype="Construction" Count="20" />
+			<Component Subtype="Superconductor" Count="50" />
+			<Component Subtype="Computer" Count="50" />
+			<Component Subtype="SteelPlate" Count="10" />
 			</Components>
 			<CriticalComponent Subtype="Computer" Index="0" />
 			<PhysicsOption>Box</PhysicsOption>
