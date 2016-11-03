@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Collections.Generic;
 using Sandbox.ModAPI;
 using Sandbox.ModAPI.Interfaces.Terminal;
 using Sandbox.Common;
@@ -27,6 +28,7 @@ namespace HoverRail {
 			Entity.NeedsUpdate |= MyEntityUpdateEnum.EACH_FRAME;
 			this.objectBuilder = objectBuilder;
 			this.id = HoverRailEngine.attachcount++;
+			this.activeRailGuides = new HashSet<RailGuide>();
 			// MyLog.Default.WriteLine(String.Format("ATTACH TO OBJECT {0}", this.id));
 			InitPowerComp();
 		}
@@ -84,23 +86,7 @@ namespace HoverRail {
 		int id;
 		private int frame = 0;
 		
-		RailGuide activeRailGuide;
-		public void LookForNewRail(Vector3D searchCenter, Vector3D hoverCenter) {
-			var area = new BoundingSphereD(searchCenter, 2.5);
-			var items = MyAPIGateway.Entities.GetEntitiesInSphere(ref area);
-			foreach (var ent in items) {
-				var railGuide = RailGuide.fromEntity(ent);
-				if (railGuide != null) {
-					var guidance = new Vector3D(0,0,0);
-					var test = railGuide.getGuidance(hoverCenter, ref guidance);
-					if (test) {
-						activeRailGuide = railGuide;
-						return;
-					}
-				}
-			}
-			activeRailGuide = null;
-		}
+		HashSet<RailGuide> activeRailGuides;
 		
 		public override void UpdateBeforeSimulation() {
 			if (!block_initialized) InitLate();
@@ -126,23 +112,55 @@ namespace HoverRail {
 			
 			var hoverCenter = Entity.WorldMatrix.Translation;
 			var searchCenter = Entity.WorldMatrix.Translation + Entity.WorldMatrix.Down * 2.499;
-			DebugDraw.Sphere(searchCenter, 2.5f, Color.Green);
+			// DebugDraw.Sphere(searchCenter, 2.5f, Color.Green);
 			
-			var guidance = new Vector3D(0, 0, 0);
-			if (activeRailGuide == null || !activeRailGuide.getGuidance(hoverCenter, ref guidance)) {
-				this.LookForNewRail(searchCenter, hoverCenter);
-				if (activeRailGuide == null) {
-					UpdatePowerUsage(0);
-					return;
+			var rail_pos = new Vector3D(0, 0, 0);
+			var weight_sum = 0.0f;
+			HashSet<RailGuide> lostGuides = new HashSet<RailGuide>();
+			RailGuide anyRailGuide = null;
+			foreach (var guide in activeRailGuides) {
+				if (!guide.getGuidance(hoverCenter, ref rail_pos, ref weight_sum)) {
+					// lost rail lock
+					lostGuides.Add(guide);
+					continue;
 				}
-				activeRailGuide.getGuidance(hoverCenter, ref guidance); // guaranteed to succeed (once)
+				anyRailGuide = guide;
 			}
 			
-			var activeBlock = activeRailGuide.cubeBlock;
-			DebugDraw.Sphere(activeBlock.WorldMatrix.Translation, 0.1f, Color.Red);
-			DebugDraw.Sphere(activeBlock.WorldMatrix.Translation + activeBlock.WorldMatrix.Up * (0.5 + 0.5 * Math.Sin(frame / 10.0)), 0.1f, Color.Red);
+			foreach (var guide in lostGuides) {
+				activeRailGuides.Remove(guide);
+			}
+			lostGuides.Clear();
 			
-			DebugDraw.Sphere(searchCenter, 0.1f, Color.Green);
+			if (weight_sum < 0.9f) {
+				// not confident in our rail lock, look for possible new rails
+				var area = new BoundingSphereD(searchCenter, 2.5);
+				var items = MyAPIGateway.Entities.GetEntitiesInSphere(ref area);
+				foreach (var ent in items) {
+					var guide = RailGuide.fromEntity(ent);
+					if (guide != null) {
+						var test = guide.getGuidance(hoverCenter, ref rail_pos, ref weight_sum);
+						if (test) {
+							activeRailGuides.Add(guide);
+							anyRailGuide = guide;
+						}
+					}
+				}
+			}
+			
+			// average by weight
+			rail_pos /= weight_sum;
+			
+			DebugDraw.Sphere(rail_pos, 0.2f, Color.Blue);
+			
+			if (activeRailGuides.Count == 0) {
+				UpdatePowerUsage(0);
+				return;
+			}
+			
+			var guidance = rail_pos - hoverCenter;
+			
+			// DebugDraw.Sphere(searchCenter, 0.1f, Color.Green);
 			
 			float force_magnitude = 0;
 			// correction force, pushes engine towards rail guide
@@ -157,7 +175,7 @@ namespace HoverRail {
 				var guidanceForce = forceLimit * Vector3D.Normalize(guidance) * factor;
 				this.avgCorrectF.update(guidanceForce);
 				DebugDraw.Sphere(searchCenter + this.avgCorrectF.value * 0.000001f, 0.1f, Color.Yellow);
-				activeRailGuide.applyForces(Entity, this.avgCorrectF.value * power_ratio);
+				anyRailGuide.applyForces(Entity, this.avgCorrectF.value * power_ratio);
 				force_magnitude += (float) this.avgCorrectF.value.Length();
 			}
 			// dampening force, reduces oscillation over time
@@ -170,7 +188,7 @@ namespace HoverRail {
 				var dampenForce = forceLimit * 0.5 * dF * factor; // separate slider?
 				this.avgDampenF.update(dampenForce);
 				DebugDraw.Sphere(searchCenter + this.avgDampenF.value * 0.000001f, 0.1f, Color.Red);
-				activeRailGuide.applyForces(Entity, this.avgDampenF.value * power_ratio);
+				anyRailGuide.applyForces(Entity, this.avgDampenF.value * power_ratio);
 				force_magnitude += (float) this.avgDampenF.value.Length();
 			}
 			this.avgGuidance.update(guidance);
@@ -198,7 +216,7 @@ namespace HoverRail {
 		public static string SIFormat(float f) {
 			if (f >= 1000000000) return String.Format("{0}G", Math.Round(f / 1000000000, 2));
 			if (f >= 1000000) return String.Format("{0}M", Math.Round(f / 1000000, 2));
-			if (f >= 1000) return String.Format("{0}K", Math.Round(f / 1000, 2));
+			if (f >= 1000) return String.Format("{0}k", Math.Round(f / 1000, 2));
 			if (f >= 1) return String.Format("{0}", Math.Round(f, 2));
 			if (f >= 0.0001) return String.Format("{0}m", Math.Round(f * 1000, 2));
 			if (f >= 0.0000001) return String.Format("{0}n", Math.Round(f * 1000000, 2));

@@ -4,8 +4,8 @@ using VRageMath;
 namespace HoverRail {
 	class Curve90_10x_12x_RailGuide : RailGuide {
 		public Curve90_10x_12x_RailGuide(IMyCubeBlock cubeBlock) : base(cubeBlock) { }
-		public override bool getGuidance(Vector3D pos, ref Vector3D direction) {
-			if (!base.getGuidance(pos, ref direction)) return false;
+		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight) {
+			if (!base.getGuidance(pos, ref guide, ref weight)) return false;
 			
 			var localCoords = Vector3D.Transform(pos, this.cubeBlock.WorldMatrixNormalizedInv);
 			if (localCoords.Y < -1.25 || localCoords.Y > 2.60) return false; // TODO lower?
@@ -36,7 +36,10 @@ namespace HoverRail {
 			
 			var worldDirToRail = Vector3D.TransformNormal(localDirToRail, this.cubeBlock.WorldMatrix);
 			DebugDraw.Line(pos, pos + worldDirToRail, 0.15f);
-			direction = worldDirToRail;
+			// TODO compute guide pos directly
+			guide += pos + worldDirToRail;
+			weight += 1;
+			
 			return true;
 		}
 	}

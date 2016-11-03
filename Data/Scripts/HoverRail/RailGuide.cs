@@ -28,7 +28,8 @@ namespace HoverRail {
 				cubeGrid.Physics.AddForce(MyPhysicsForceType.APPLY_WORLD_FORCE, -entforce, this.cubeBlock.WorldMatrix.Translation, Vector3.Zero);
 			}
 		}
-		public virtual bool getGuidance(Vector3D pos, ref Vector3D direction) {
+		// note: new values must be *ADDED* to guide and weight!
+		public virtual bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight) {
 			return cubeBlock.IsFunctional;
 		}
 		public static RailGuide fromEntity(IMyEntity ent) {
