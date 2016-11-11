@@ -108,6 +108,8 @@ namespace HoverRail {
 			}
 			// MyLog.Default.WriteLine(String.Format("power ratio is {0}", power_ratio));
 			
+			float height = (float) SettingsStore.Get(Entity, "height_offset", 1.25f);
+			
 			double forceLimit = (double) (float) SettingsStore.Get(Entity, "force_slider", 100000.0f);
 			
 			var hoverCenter = Entity.WorldMatrix.Translation;
@@ -119,7 +121,7 @@ namespace HoverRail {
 			HashSet<RailGuide> lostGuides = new HashSet<RailGuide>();
 			RailGuide anyRailGuide = null;
 			foreach (var guide in activeRailGuides) {
-				if (!guide.getGuidance(hoverCenter, ref rail_pos, ref weight_sum)) {
+				if (!guide.getGuidance(hoverCenter, ref rail_pos, ref weight_sum, height)) {
 					// lost rail lock
 					lostGuides.Add(guide);
 					continue;
@@ -139,7 +141,7 @@ namespace HoverRail {
 				foreach (var ent in items) {
 					var guide = RailGuide.fromEntity(ent);
 					if (guide != null) {
-						var test = guide.getGuidance(hoverCenter, ref rail_pos, ref weight_sum);
+						var test = guide.getGuidance(hoverCenter, ref rail_pos, ref weight_sum, height);
 						if (test) {
 							activeRailGuides.Add(guide);
 							anyRailGuide = guide;
@@ -201,7 +203,7 @@ namespace HoverRail {
 
 	static class EngineUI {
 		public static bool initialized = false;
-		public static IMyTerminalControlSlider forceSlider;
+		public static IMyTerminalControlSlider forceSlider, heightSlider;
 		public static IMyTerminalControlOnOffSwitch powerSwitch;
 		
 		public static bool BlockIsEngine(IMyTerminalBlock block) {
@@ -246,6 +248,17 @@ namespace HoverRail {
 			forceSlider.Writer  = (b, result) => result.Append(String.Format("{0}N", SIFormat((float) SettingsStore.Get(b, "force_slider", 100000.0f))));
 			forceSlider.Visible = BlockIsEngine;
 			MyAPIGateway.TerminalControls.AddControl<IMyTerminalBlock>(forceSlider);
+			
+			heightSlider = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlSlider, IMyTerminalBlock>( "HoverRail_HeightOffset" );
+			heightSlider.Title   = MyStringId.GetOrCompute("Height Offset");
+			heightSlider.Tooltip = MyStringId.GetOrCompute("The height we float above the track.");
+			heightSlider.SetLimits(0.1f, 2.5f);
+			heightSlider.SupportsMultipleBlocks = true;
+			heightSlider.Getter  = b => (float) SettingsStore.Get(b, "height_offset", 1.25f);
+			heightSlider.Setter  = (b, v) => SettingsStore.Set(b, "height_offset", (float) Math.Round(v, 1));
+			heightSlider.Writer  = (b, result) => result.Append(String.Format("{0}m", (float) SettingsStore.Get(b, "height_offset", 1.25f)));
+			heightSlider.Visible = BlockIsEngine;
+			MyAPIGateway.TerminalControls.AddControl<IMyTerminalBlock>(heightSlider);
 		}
 	}
 }

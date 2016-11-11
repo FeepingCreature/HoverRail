@@ -4,8 +4,8 @@ using VRageMath;
 namespace HoverRail {
 	class Curve90_10x_12x_RailGuide : RailGuide {
 		public Curve90_10x_12x_RailGuide(IMyCubeBlock cubeBlock) : base(cubeBlock) { }
-		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight) {
-			if (!base.getGuidance(pos, ref guide, ref weight)) return false;
+		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight, float height) {
+			if (!base.getGuidance(pos, ref guide, ref weight, height)) return false;
 			
 			var localCoords = Vector3D.Transform(pos, this.cubeBlock.WorldMatrixNormalizedInv);
 			if (localCoords.Y < -1.25 || localCoords.Y > 2.60) return false; // TODO lower?
@@ -15,13 +15,13 @@ namespace HoverRail {
 			if (angle < 0 || angle > Math.PI / 2) return false;
 			var radius = Math.Sqrt(localCoords2.X * localCoords2.X + localCoords2.Z * localCoords2.Z);
 			
-			var planarCoords = new Vector3D(15, 0, 15) - new Vector3D(radius, localCoords2.Y, 0.0);
+			// var planarCoords = new Vector3D(15, 0, 15) - new Vector3D(radius, localCoords2.Y, 0.0);
 			// MyLog.Default.WriteLine(String.Format("angle of {0} for {1} - {2}", angle, localCoords.ToString(), planarCoords.ToString()));
 			
 			// push the outer rail up a bit
-			var height = Math.Sin(angle * 2); // 0 .. 1 .. 0
-			var rail1 = new Vector3D(15 - Math.Sin(angle) * 28.75, height, 15 - Math.Cos(angle) * 28.75);
-			var rail2 = new Vector3D(15 - Math.Sin(angle) * 23.75, 0, 15 - Math.Cos(angle) * 23.75);
+			var leanHeight = Math.Sin(angle * 2); // 0 .. 1 .. 0
+			var rail1 = new Vector3D(15 - Math.Sin(angle) * 28.75, height - 1.25 + leanHeight, 15 - Math.Cos(angle) * 28.75);
+			var rail2 = new Vector3D(15 - Math.Sin(angle) * 23.75, height - 1.25, 15 - Math.Cos(angle) * 23.75);
 			// MyLog.Default.WriteLine(String.Format("rail1 = {0}, rail2 = {1}, local {2}", rail1.ToString(), rail2.ToString(), localCoords.ToString()));
 			
 			var localDirToRail1 = rail1 - localCoords;

@@ -36,8 +36,8 @@ namespace HoverRail {
 			this.adjustMatrix = MatrixD.CreateTranslation(0, -1.25, 0) * MatrixD.CreateRotationZ(-angle);
 			this.unadjustMatrix = MatrixD.Invert(this.adjustMatrix);
 		}
-		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight) {
-			if (!base.getGuidance(pos, ref guide, ref weight)) return false;
+		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight, float height) {
+			if (!base.getGuidance(pos, ref guide, ref weight, height)) return false;
 			// size: 5x2x1, meaning 12.5 x 5 x 2.5, slope of -1/5
 			// rail begins at x=-6.25 y=1.25 and goes to x=6.25 y=-1.25
 			
@@ -45,7 +45,8 @@ namespace HoverRail {
 			var unrotatedCoords = Vector3D.Transform(localCoords, ref this.adjustMatrix);
 			// MyLog.Default.WriteLine(String.Format("angle of {0} turns {1} to {2}", angle, localCoords, unrotatedCoords));
 			
-			return StraightRailGuide.straight_guidance(6.25f /* todo fix */, pos, this.unadjustMatrix * this.cubeBlock.WorldMatrix, unrotatedCoords, ref guide, ref weight);
+			return StraightRailGuide.straight_guidance(6.25f /* todo fix */, pos, this.unadjustMatrix * this.cubeBlock.WorldMatrix, unrotatedCoords,
+				ref guide, ref weight, height);
 		}
 	}
 	
@@ -53,17 +54,15 @@ namespace HoverRail {
 		public SlopeTop5xRailGuide(IMyCubeBlock cubeBlock) : base(cubeBlock) { }
 		// rail is -0.008 x^2 - (12.5*0.008) x - 6.25^2 * 0.008
 		public static double guidefn(double x) {
-			var y = -0.008 * x * x - (12.5*0.008) * x - 6.25*6.25*0.008;
-			y += 1.25; // guide is half a block above the rail
-			return y;
+			return -0.008 * x * x - (12.5*0.008) * x - 6.25*6.25*0.008;
 		}
 		public static double distance(double u, double v, double x) {
 			var y = guidefn(x);
 			double dx = u - x, dy = v - y;
 			return dx * dx + dy * dy;
 		}
-		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight) {
-			if (!base.getGuidance(pos, ref guide, ref weight)) return false;
+		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight, float height) {
+			if (!base.getGuidance(pos, ref guide, ref weight, height)) return false;
 			// size: 5x2x1, meaning 12.5 x 5 x 2.5
 			// approximated by y = -(x+6.25)^2*0.008, see http://tinyurl.com/gnm5akr
 			// for X flip, see below
@@ -71,14 +70,14 @@ namespace HoverRail {
 			var localCoords = Vector3D.Transform(pos, this.cubeBlock.WorldMatrixNormalizedInv);
 			localCoords.X = -localCoords.X; // just mirror, todo redo the equation
 			if (localCoords.Z < -1.25 || localCoords.Z > 1.25) return false;
-			localCoords.Y -= 1.25; // height above rail - half block
+			localCoords.Y -= height; // guide height above rail -- so we track the actual slope
 			// closest point to a poly is not entirely trivial and I cba solving it manually, so resort to the laziest approach possible: BINARY SEARCH.
 			double x = 0.0;
 			bool success = MinSearch.find_smallest(ref x, xpar => distance(localCoords.X, localCoords.Y, xpar), localCoords.X, -6.25, 6.25, 10);
 			// MyLog.Default.WriteLine(String.Format("success {0} finding x {1} which has guidefn {2} at {3}", success, x, guidefn(x), localCoords));
 			if (!success) return false;
 			
-			var localGuidepoint = new Vector3D(-x, guidefn(x), 0);
+			var localGuidepoint = new Vector3D(-x, guidefn(x) + height, 0);
 			var worldGuidepoint = Vector3D.Transform(localGuidepoint, this.cubeBlock.WorldMatrix);
 			guide += worldGuidepoint;
 			weight += 1;
@@ -88,19 +87,17 @@ namespace HoverRail {
 	
 	class SlopeBottom5xRailGuide : RailGuide {
 		public SlopeBottom5xRailGuide(IMyCubeBlock cubeBlock) : base(cubeBlock) { }
-		// rail is -0.008 x^2 - (12.5*0.008) x - 6.25^2 * 0.008
-		public static double guidefn(double x) {
-			var y = 0.008 * x * x + (12.5*0.008) * x + 6.25*6.25*0.008 - 2.5;
-			y += 1.25; // guide is half a block above the rail
-			return y;
+		// rail is 0.008 x^2 + (12.5*0.008) x + 6.25^2 * 0.008
+		public static double railfn(double x) {
+			return 0.008 * x * x + (12.5*0.008) * x + 6.25*6.25*0.008 - 2.5;
 		}
 		public static double distance(double u, double v, double x) {
-			var y = guidefn(x);
+			var y = railfn(x);
 			double dx = u - x, dy = v - y;
 			return dx * dx + dy * dy;
 		}
-		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight) {
-			if (!base.getGuidance(pos, ref guide, ref weight)) return false;
+		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight, float height) {
+			if (!base.getGuidance(pos, ref guide, ref weight, height)) return false;
 			// size: 5x1x1, meaning 12.5 x 2.5 x 2.5
 			// approximated by y = (x+6.25)^2*0.008-2.5, see http://tinyurl.com/j9q6fc4
 			// except with flipped x because whyy
@@ -108,11 +105,13 @@ namespace HoverRail {
 			var localCoords = Vector3D.Transform(pos, this.cubeBlock.WorldMatrixNormalizedInv);
 			localCoords.X = -localCoords.X; // just mirror, todo redo the equation
 			if (localCoords.Z < -1.25 || localCoords.Z > 1.25) return false;
+			// "rail coords"
+			localCoords.Y -= height; // see above
 			double x = 0.0;
 			bool success = MinSearch.find_smallest(ref x, xpar => distance(localCoords.X, localCoords.Y, xpar), localCoords.X, -6.25, 6.25, 10);
 			if (!success) return false;
 			
-			var localGuidepoint = new Vector3D(-x, guidefn(x), 0);
+			var localGuidepoint = new Vector3D(-x, railfn(x) + height, 0);
 			var worldGuidepoint = Vector3D.Transform(localGuidepoint, this.cubeBlock.WorldMatrix);
 			guide += worldGuidepoint;
 			weight += 1;

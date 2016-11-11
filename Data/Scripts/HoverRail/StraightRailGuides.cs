@@ -12,7 +12,10 @@ namespace HoverRail {
 		float halfsize;
 		public StraightRailGuide(IMyCubeBlock cubeBlock, float halfsize) : base(cubeBlock) { this.halfsize = halfsize; }
 		// also used in sloped rail
-		public static bool straight_guidance(float halfsize, Vector3D pos, MatrixD cubeMatrix, Vector3D localCoords, ref Vector3D guide, ref float weight) {
+		public static bool straight_guidance(float halfsize, Vector3D pos, MatrixD cubeMatrix, Vector3D localCoords,
+			ref Vector3D guide, ref float weight, float height
+		) {
+			localCoords.Y -= height - 1.25;
 			var overhang = StraightRailConstants.OVERHANG;
 			if (localCoords.X < -halfsize - overhang || localCoords.X > halfsize + overhang) return false; // outside the box
 			if (localCoords.Y < -1.25 || localCoords.Y > 2.60) return false; // some leeway above TODO lower
@@ -34,11 +37,11 @@ namespace HoverRail {
 			guide += (pos + worldDirToRail) * myWeight;
 			return true;
 		}
-		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight) {
-			if (!base.getGuidance(pos, ref guide, ref weight)) return false;
+		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight, float height) {
+			if (!base.getGuidance(pos, ref guide, ref weight, height)) return false;
 			
 			var localCoords = Vector3D.Transform(pos, this.cubeBlock.WorldMatrixNormalizedInv);
-			return straight_guidance(halfsize, pos, this.cubeBlock.WorldMatrix, localCoords, ref guide, ref weight);
+			return straight_guidance(halfsize, pos, this.cubeBlock.WorldMatrix, localCoords, ref guide, ref weight, height);
 		}
 	}
 	class Straight1xRailGuide : StraightRailGuide {

@@ -29,7 +29,8 @@ namespace HoverRail {
 			}
 		}
 		// note: new values must be *ADDED* to guide and weight!
-		public virtual bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight) {
+		// height indicates the height that the guide rail should be above the track
+		public virtual bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight, float height) {
 			return cubeBlock.IsFunctional;
 		}
 		public static RailGuide fromEntity(IMyEntity ent) {
