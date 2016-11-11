@@ -51,6 +51,15 @@ namespace HoverRail {
 			if (subtypeId == "HoverRail_Curved_90_10x-12x_Large") {
 				return new Curve90_10x_12x_RailGuide(cubeBlock);
 			}
+			if (subtypeId == "HoverRail_Slope_Top_x5_Large") {
+				return new SlopeTop5xRailGuide(cubeBlock);
+			}
+			if (subtypeId == "HoverRail_Slope_x5_Large") {
+				return new Sloped5xRailGuide(cubeBlock);
+			}
+			if (subtypeId == "HoverRail_Slope_Bottom_x5_Large") {
+				return new SlopeBottom5xRailGuide(cubeBlock);
+			}
 			return null;
 		}
 	}

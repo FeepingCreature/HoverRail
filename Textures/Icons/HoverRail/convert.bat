@@ -21,3 +21,15 @@ del HoverRail_Curved_90_10x-12x.png
 copy HoverRail_Engine0003.png HoverRail_Engine.png
 texconv HoverRail_Engine.png
 del HoverRail_Engine.png
+
+copy HoverRail_Slope_Top_x50003.png HoverRail_Slope_Top_x5.png
+texconv HoverRail_Slope_Top_x5.png
+del HoverRail_Slope_Top_x5.png
+
+copy HoverRail_Slope_Bottom_x50003.png HoverRail_Slope_Bottom_x5.png
+texconv HoverRail_Slope_Bottom_x5.png
+del HoverRail_Slope_Bottom_x5.png
+
+copy HoverRail_Slope_x50003.png HoverRail_Slope_x5.png
+texconv HoverRail_Slope_x5.png
+del HoverRail_Slope_x5.png

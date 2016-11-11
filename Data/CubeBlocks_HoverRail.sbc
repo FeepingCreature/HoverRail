@@ -246,6 +246,111 @@
 			<ExcludedAreaForCamera />
 		</Definition>
 
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Slope_Top_x5_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Slope Top x5</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Slope_Top_x5.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="5" y="2" z="1"><X>5</X><Y>2</Y><Z>1</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Slope_Top_x5_Large.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="5" />
+				<Component Subtype="Girder" Count="40" />
+				<Component Subtype="SteelPlate" Count="5" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Slope_Top_x5_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Slope_Top_x5_Large_Constr2.mwm" />
+			</BuildProgressModels>
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+				<MountPoints>
+				<MountPoint Side="Left" StartX="0.20" StartY="1.04" EndX="0.80" EndY="1.96" />
+				<MountPoint Side="Right" StartX="0.20" StartY="1.10" EndX="0.80" EndY="1.90" />
+				<MountPoint Side="Left" StartX="0.20" StartY="0.04" EndX="0.80" EndY="0.96" />
+				<MountPoint Side="Right" StartX="0.20" StartY="0.10" EndX="0.80" EndY="0.90" />
+				</MountPoints>
+			<BlockPairName>HoverRail_Slope_Top_x5</BlockPairName>
+			<Center x="0" y="0" z="0" /> <!-- otherwise it can't connect on the bottom -->
+			<ExcludedAreaForCamera />
+		</Definition>
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Slope_x5_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Slope x5</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Slope_x5.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="5" y="2" z="1"><X>5</X><Y>2</Y><Z>1</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Slope_x5_Large.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="5" />
+				<Component Subtype="Girder" Count="40" />
+				<Component Subtype="SteelPlate" Count="5" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Slope_x5_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Slope_x5_Large_Constr2.mwm" />
+			</BuildProgressModels>
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+				<MountPoints>
+				<MountPoint Side="Left" StartX="0.20" StartY="0.39" EndX="0.80" EndY="0.81" />
+				<MountPoint Side="Right" StartX="0.20" StartY="1.34" EndX="0.80" EndY="1.76" />
+				</MountPoints>
+			<BlockPairName>HoverRail_Slope_x5</BlockPairName>
+			<Center x="0" y="0" z="0" />
+			<ExcludedAreaForCamera />
+		</Definition>
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Slope_Bottom_x5_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Slope Bottom x5</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Slope_Bottom_x5.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="5" y="2" z="1"><X>5</X><Y>2</Y><Z>1</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Slope_Bottom_x5_Large.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="5" />
+				<Component Subtype="Girder" Count="40" />
+				<Component Subtype="SteelPlate" Count="5" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Slope_Bottom_x5_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Slope_Bottom_x5_Large_Constr2.mwm" />
+			</BuildProgressModels>
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+				<MountPoints>
+				<MountPoint Side="Left" StartX="0.20" StartY="1.05" EndX="0.80" EndY="1.95" />
+				<MountPoint Side="Right" StartX="0.20" StartY="0.08" EndX="0.80" EndY="0.92" />
+				<MountPoint Side="Bottom" StartX="3.21" StartY="0.20" EndX="4.89" EndY="0.80" />
+				<MountPoint Side="Left" StartX="0.20" StartY="0.05" EndX="0.80" EndY="0.95" />
+				<MountPoint Side="Right" StartX="0.20" StartY="1.07" EndX="0.80" EndY="1.93" />
+			</MountPoints>
+			<BlockPairName>HoverRail_Slope_Bottom_x5</BlockPairName>
+			<Center x="0" y="0" z="0" />
+			<ExcludedAreaForCamera />
+		</Definition>
+
 		<Definition xsi:type="MyObjectBuilder_TerminalBlockDefinition">
 			<Id>
 				<TypeId>TerminalBlock</TypeId>
