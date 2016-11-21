@@ -350,6 +350,51 @@
 			<Center x="0" y="0" z="0" />
 			<ExcludedAreaForCamera />
 		</Definition>
+		<Definition xsi:type="MyObjectBuilder_TerminalBlockDefinition">
+			<Id>
+				<TypeId>TerminalBlock</TypeId>
+				<SubtypeId>HoverRail_Junction_Left_10x-12x_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Junction Left x10-x12</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Junction_Left_10x-12x.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="12" y="1" z="12"><X>12</X><Y>1</Y><Z>12</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Junction_Left_10x-12x_Large.mwm</Model>
+			<Components>
+				<Component Subtype="SteelPlate" Count="36" />
+				<Component Subtype="Girder" Count="288" />
+				<Component Subtype="Construction" Count="20" />
+				<Component Subtype="Motor" Count="5" />
+				<Component Subtype="SteelPlate" Count="36" />
+			</Components>
+			<CriticalComponent Subtype="Motor" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Junction_Left_10x-12x_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Junction_Left_10x-12x_Large_Constr2.mwm" />
+			</BuildProgressModels>
+			<MountPoints>
+				<MountPoint Side="Left" StartX="2.20" StartY="-0.05" EndX="2.80" EndY="0.55" />
+				<MountPoint Side="Back" StartX="0.20" StartY="-0.05" EndX="0.80" EndY="0.55" />
+				<MountPoint Side="Left" StartX="0.20" StartY="-0.05" EndX="0.80" EndY="0.55" />
+				<MountPoint Side="Right" StartX="9.20" StartY="-0.05" EndX="9.80" EndY="0.55" />
+				<MountPoint Side="Bottom" StartX="0.20" StartY="0.20" EndX="11.80" EndY="0.80" />
+				<MountPoint Side="Right" StartX="11.20" StartY="-0.05" EndX="11.80" EndY="0.55" />
+				<MountPoint Side="Back" StartX="2.20" StartY="-0.05" EndX="2.80" EndY="0.55" />
+				<MountPoint Side="Bottom" StartX="0.20" StartY="2.20" EndX="11.80" EndY="2.80" />
+				<MountPoint Side="Bottom" StartX="4.70" StartY="1.20" EndX="8.80" EndY="1.80" />
+				<MountPoint Side="Bottom" StartX="2.70" StartY="3.20" EndX="8.80" EndY="3.80" />
+				<MountPoint Side="Bottom" StartX="0.20" StartY="6.20" EndX="2.80" EndY="11.80" />
+				<MountPoint Side="Bottom" StartX="1.20" StartY="4.20" EndX="6.30" EndY="5.80" />
+			</MountPoints>
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+			<BlockPairName>HoverRail_Junction_Left_10x-12x</BlockPairName>
+			<Center x="0" y="0" z="0" />
+			<ExcludedAreaForCamera />
+		</Definition>
 
 		<Definition xsi:type="MyObjectBuilder_TerminalBlockDefinition">
 			<Id>
