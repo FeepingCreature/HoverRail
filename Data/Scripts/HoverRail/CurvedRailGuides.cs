@@ -4,10 +4,7 @@ using VRageMath;
 namespace HoverRail {
 	class Curve90_10x_12x_RailGuide : RailGuide {
 		public Curve90_10x_12x_RailGuide(IMyCubeBlock cubeBlock) : base(cubeBlock) { }
-		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight, float height) {
-			if (!base.getGuidance(pos, ref guide, ref weight, height)) return false;
-			
-			var localCoords = Vector3D.Transform(pos, this.cubeBlock.WorldMatrixNormalizedInv);
+		public static bool curved_guidance(Vector3D localCoords, MatrixD worldMat, bool lean, ref Vector3D guide, ref float weight, float height) {
 			if (localCoords.Y < -1.25 || localCoords.Y > 2.60) return false; // TODO lower?
 			// -15 .. 15
 			var localCoords2 = new Vector3D(15, 0, 15) - localCoords; // 0 .. 30
@@ -19,9 +16,15 @@ namespace HoverRail {
 			// MyLog.Default.WriteLine(String.Format("angle of {0} for {1} - {2}", angle, localCoords.ToString(), planarCoords.ToString()));
 			
 			// push the outer rail up a bit
-			var leanHeight = Math.Sin(angle * 2); // 0 .. 1 .. 0
-			var localRail1 = new Vector3D(15 - Math.Sin(angle) * 28.75, height - 1.25 + leanHeight, 15 - Math.Cos(angle) * 28.75);
-			var localRail2 = new Vector3D(15 - Math.Sin(angle) * 23.75, height - 1.25, 15 - Math.Cos(angle) * 23.75);
+			var leanHeight = 0.0;
+			if (lean) leanHeight = Math.Sin(angle * 2); // 0 .. 1 .. 0
+			// curve of rail matches approximately
+			// x=23.75*cos(angle)*(1+pow(fabs(sin(angle*2)), 1.6)*0.063)
+			// y=23.75*sin(angle)*(1+pow(fabs(sin(angle*2)), 1.6)*0.063)
+			// (empirically determined in blender)
+			var fudgeFactor = 1 + Math.Pow(Math.Abs(Math.Sin(angle * 2)), 1.6) * 0.063;
+			var localRail1 = new Vector3D(15 - Math.Sin(angle) * 28.75 * fudgeFactor, height - 1.25 + leanHeight, 15 - Math.Cos(angle) * 28.75 * fudgeFactor);
+			var localRail2 = new Vector3D(15 - Math.Sin(angle) * 23.75 * fudgeFactor, height - 1.25             , 15 - Math.Cos(angle) * 23.75 * fudgeFactor);
 			// MyLog.Default.WriteLine(String.Format("rail1 = {0}, rail2 = {1}, local {2}", localRail1, localRail2, localCoords));
 			
 			var localDirToRail1 = localRail1 - localCoords;
@@ -34,12 +37,18 @@ namespace HoverRail {
 			else { localDirToRail = localDirToRail2; len = len2; }
 			if (len > 1.75) return false;
 			
-			var worldRail = Vector3D.Transform(localCoords + localDirToRail, this.cubeBlock.WorldMatrix);
+			var worldRail = Vector3D.Transform(localCoords + localDirToRail, worldMat);
 			// DebugDraw.Line(pos, worldRail, 0.15f);
 			guide += worldRail;
 			weight += 1;
 			
 			return true;
+		}
+		public override bool getGuidance(Vector3D pos, ref Vector3D guide, ref float weight, float height) {
+			if (!base.getGuidance(pos, ref guide, ref weight, height)) return false;
+			
+			var localCoords = Vector3D.Transform(pos, this.cubeBlock.WorldMatrixNormalizedInv);
+			return Curve90_10x_12x_RailGuide.curved_guidance(localCoords, this.cubeBlock.WorldMatrix, true, ref guide, ref weight, height);
 		}
 	}
 }
