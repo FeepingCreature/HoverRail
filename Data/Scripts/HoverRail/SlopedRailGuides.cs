@@ -43,9 +43,10 @@ namespace HoverRail {
 			
 			var localCoords = Vector3D.Transform(pos, this.cubeBlock.WorldMatrixNormalizedInv);
 			var unrotatedCoords = Vector3D.Transform(localCoords, ref this.adjustMatrix);
-			// MyLog.Default.WriteLine(String.Format("angle of {0} turns {1} to {2}", angle, localCoords, unrotatedCoords));
+			// MyLog.Default.WriteLine(String.Format("angle of {0} turns {1} to {2}", Math.Acos(5 / Math.Sqrt(5*5 + 1*1)), localCoords, unrotatedCoords));
+			var length = (float) Math.Sqrt(5*5 + 1*1) * 2.5f;
 			
-			return StraightRailGuide.straight_guidance(6.25f /* todo fix */, pos, this.unadjustMatrix * this.cubeBlock.WorldMatrix, unrotatedCoords,
+			return StraightRailGuide.straight_guidance(length, this.unadjustMatrix * this.cubeBlock.WorldMatrix, unrotatedCoords,
 				ref guide, ref weight, height);
 		}
 	}
