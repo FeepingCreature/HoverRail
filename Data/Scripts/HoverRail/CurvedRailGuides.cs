@@ -20,12 +20,12 @@ namespace HoverRail {
 			
 			// push the outer rail up a bit
 			var leanHeight = Math.Sin(angle * 2); // 0 .. 1 .. 0
-			var rail1 = new Vector3D(15 - Math.Sin(angle) * 28.75, height - 1.25 + leanHeight, 15 - Math.Cos(angle) * 28.75);
-			var rail2 = new Vector3D(15 - Math.Sin(angle) * 23.75, height - 1.25, 15 - Math.Cos(angle) * 23.75);
-			// MyLog.Default.WriteLine(String.Format("rail1 = {0}, rail2 = {1}, local {2}", rail1.ToString(), rail2.ToString(), localCoords.ToString()));
+			var localRail1 = new Vector3D(15 - Math.Sin(angle) * 28.75, height - 1.25 + leanHeight, 15 - Math.Cos(angle) * 28.75);
+			var localRail2 = new Vector3D(15 - Math.Sin(angle) * 23.75, height - 1.25, 15 - Math.Cos(angle) * 23.75);
+			// MyLog.Default.WriteLine(String.Format("rail1 = {0}, rail2 = {1}, local {2}", localRail1, localRail2, localCoords));
 			
-			var localDirToRail1 = rail1 - localCoords;
-			var localDirToRail2 = rail2 - localCoords;
+			var localDirToRail1 = localRail1 - localCoords;
+			var localDirToRail2 = localRail2 - localCoords;
 			var localDirToRail = Vector3D.Zero;
 			var len1 = localDirToRail1.Length();
 			var len2 = localDirToRail2.Length();
@@ -34,10 +34,9 @@ namespace HoverRail {
 			else { localDirToRail = localDirToRail2; len = len2; }
 			if (len > 1.75) return false;
 			
-			var worldDirToRail = Vector3D.TransformNormal(localDirToRail, this.cubeBlock.WorldMatrix);
-			DebugDraw.Line(pos, pos + worldDirToRail, 0.15f);
-			// TODO compute guide pos directly
-			guide += pos + worldDirToRail;
+			var worldRail = Vector3D.Transform(localCoords + localDirToRail, this.cubeBlock.WorldMatrix);
+			// DebugDraw.Line(pos, worldRail, 0.15f);
+			guide += worldRail;
 			weight += 1;
 			
 			return true;
