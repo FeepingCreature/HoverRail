@@ -150,17 +150,18 @@ namespace HoverRail {
 				}
 			}
 			
-			// average by weight
-			rail_pos /= weight_sum;
-			
-			DebugDraw.Sphere(rail_pos, 0.2f, Color.Blue);
-			
+			// MyLog.Default.WriteLine(String.Format("{0}:- hovering at {1}", Entity.EntityId, hoverCenter));
 			if (activeRailGuides.Count == 0) {
 				UpdatePowerUsage(0);
 				return;
 			}
 			
+			// average by weight
+			rail_pos /= weight_sum;
+			
 			var guidance = rail_pos - hoverCenter;
+			// MyLog.Default.WriteLine(String.Format("{0}: rail pos is {1}, due to weight correction by {2}; guidance {3}", Entity.EntityId, rail_pos, weight_sum, guidance));
+			DebugDraw.Sphere(rail_pos, (float) guidance.Length(), Color.Blue);
 			
 			// DebugDraw.Sphere(searchCenter, 0.1f, Color.Green);
 			
@@ -168,17 +169,19 @@ namespace HoverRail {
 			// correction force, pushes engine towards rail guide
 			{
 				var len = guidance.Length() / 2.5; // 0 .. 1
-				var weight = len;
-				if (weight > 0.99) weight = 0.99; // always some force
-				const double splitPoint = 0.5;
-				if (weight > splitPoint) weight = 1.0 - (weight - splitPoint) / (1.0 - splitPoint);
-				else weight = weight / splitPoint;
-				var factor = Math.Pow(weight, 2.0); // spiken
-				var guidanceForce = forceLimit * Vector3D.Normalize(guidance) * factor;
-				this.avgCorrectF.update(guidanceForce);
-				DebugDraw.Sphere(searchCenter + this.avgCorrectF.value * 0.000001f, 0.1f, Color.Yellow);
-				anyRailGuide.applyForces(Entity, this.avgCorrectF.value * power_ratio);
-				force_magnitude += (float) this.avgCorrectF.value.Length();
+				if (len > 0.001) {
+					var weight = len;
+					if (weight > 0.99) weight = 0.99; // always some force
+					const double splitPoint = 0.5;
+					if (weight > splitPoint) weight = 1.0 - (weight - splitPoint) / (1.0 - splitPoint);
+					else weight = weight / splitPoint;
+					var factor = Math.Pow(weight, 2.0); // spiken
+					var guidanceForce = forceLimit * Vector3D.Normalize(guidance) * factor;
+					this.avgCorrectF.update(guidanceForce);
+					DebugDraw.Sphere(searchCenter + this.avgCorrectF.value * 0.000001f, 0.1f, Color.Yellow);
+					anyRailGuide.applyForces(Entity, this.avgCorrectF.value * power_ratio);
+					force_magnitude += (float) this.avgCorrectF.value.Length();
+				}
 			}
 			// dampening force, reduces oscillation over time
 			var dF = guidance - this.avgGuidance.value;
