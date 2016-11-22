@@ -75,6 +75,9 @@ namespace HoverRail {
 			if (subtypeId == "HoverRail_Junction_Left_10x-12x_Large") {
 				return new Junction_12x_Left_RailGuide(cubeBlock);
 			}
+			if (subtypeId == "HoverRail_Junction_Right_10x-12x_Large") {
+				return new Junction_12x_Right_RailGuide(cubeBlock);
+			}
 			return null;
 		}
 	}

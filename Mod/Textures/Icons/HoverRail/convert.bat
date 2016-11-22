@@ -37,3 +37,7 @@ del HoverRail_Slope_x5.png
 copy HoverRail_Junction_Left_10x-12x0003.png HoverRail_Junction_Left_10x-12x.png
 texconv HoverRail_Junction_Left_10x-12x.png
 del HoverRail_Junction_Left_10x-12x.png
+
+copy HoverRail_Junction_Right_10x-12x0003.png HoverRail_Junction_Right_10x-12x.png
+texconv HoverRail_Junction_Right_10x-12x.png
+del HoverRail_Junction_Right_10x-12x.png
