@@ -25,6 +25,7 @@ namespace HoverRail {
 			Entity.NeedsUpdate |= MyEntityUpdateEnum.EACH_FRAME;
 		}
 		public void InitLate() {
+			if (!(Entity as IMyCubeBlock).IsFunctional) return; // no subparts will be available
 			short_initial = Entity.GetSubpart(swivel_short).PositionComp.LocalMatrix;
 			long_initial = Entity.GetSubpart(swivel_long).PositionComp.LocalMatrix;
 			block_initialized = true;

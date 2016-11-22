@@ -423,18 +423,18 @@
 			<MirroringZ>Y</MirroringZ>
 			<MirroringY>Z</MirroringY>
 			<MountPoints>
-				<MountPoint Side="Right" StartX="2.20" StartY="-0.05" EndX="2.80" EndY="0.55" />
-				<MountPoint Side="Back" StartX="0.20" StartY="-0.05" EndX="0.80" EndY="0.55" />
-				<MountPoint Side="Right" StartX="0.20" StartY="-0.05" EndX="0.80" EndY="0.55" />
 				<MountPoint Side="Left" StartX="9.20" StartY="-0.05" EndX="9.80" EndY="0.55" />
-				<MountPoint Side="Top" StartX="0.20" StartY="0.20" EndX="11.80" EndY="0.80" />
+				<MountPoint Side="Front" StartX="11.20" StartY="-0.05" EndX="11.80" EndY="0.55" />
 				<MountPoint Side="Left" StartX="11.20" StartY="-0.05" EndX="11.80" EndY="0.55" />
-				<MountPoint Side="Back" StartX="2.20" StartY="-0.05" EndX="2.80" EndY="0.55" />
-				<MountPoint Side="Top" StartX="0.20" StartY="2.20" EndX="11.80" EndY="2.80" />
-				<MountPoint Side="Top" StartX="4.70" StartY="1.20" EndX="8.80" EndY="1.80" />
-				<MountPoint Side="Top" StartX="2.70" StartY="3.20" EndX="8.80" EndY="3.80" />
-				<MountPoint Side="Top" StartX="0.20" StartY="6.20" EndX="2.80" EndY="11.80" />
-				<MountPoint Side="Top" StartX="1.20" StartY="4.20" EndX="6.30" EndY="5.80" />
+				<MountPoint Side="Right" StartX="2.20" StartY="-0.05" EndX="2.80" EndY="0.55" />
+				<MountPoint Side="Bottom" StartX="0.20" StartY="11.20" EndX="11.80" EndY="11.80" />
+				<MountPoint Side="Right" StartX="0.20" StartY="-0.05" EndX="0.80" EndY="0.55" />
+				<MountPoint Side="Front" StartX="9.20" StartY="-0.05" EndX="9.80" EndY="0.55" />
+				<MountPoint Side="Bottom" StartX="0.20" StartY="9.20" EndX="11.80" EndY="9.80" />
+				<MountPoint Side="Bottom" StartX="4.70" StartY="10.20" EndX="8.80" EndY="10.80" />
+				<MountPoint Side="Bottom" StartX="2.70" StartY="8.20" EndX="8.80" EndY="8.80" />
+				<MountPoint Side="Bottom" StartX="0.20" StartY="0.20" EndX="2.80" EndY="5.80" />
+				<MountPoint Side="Bottom" StartX="1.20" StartY="6.20" EndX="6.30" EndY="7.80" />
 			</MountPoints>
 			<BlockPairName>HoverRail_Junction_Right_10x-12x</BlockPairName>
 			<Center x="0" y="0" z="11" />
