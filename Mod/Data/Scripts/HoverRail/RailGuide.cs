@@ -1,4 +1,6 @@
+using System;
 using Sandbox.Game.Entities;
+using VRage.Utils;
 using VRageMath;
 
 namespace HoverRail {
@@ -9,15 +11,24 @@ namespace HoverRail {
 			this.subtypeId = cubeBlock.BlockDefinition.SubtypeId;
 			this.cubeBlock = cubeBlock;
 		}
+		public override int GetHashCode() {
+			return (int) this.cubeBlock.EntityId;
+		}
+		public override bool Equals(object obj) {
+			RailGuide rg = obj as RailGuide;
+			return rg != null && rg.cubeBlock == cubeBlock;
+		}
 		public void applyForces(IMyEntity entity, Vector3D entforce) {
 			IMyCubeGrid entgrid = null;
 			var entblock = entity as IMyCubeBlock;
 			if (entblock != null) entgrid = entblock.CubeGrid;
 			
+			var force_pos = entity.WorldMatrix.Translation; // center of engine
+			
 			// action
 			if (entgrid != null && entgrid.Physics != null && !entgrid.IsStatic) {
-				// MyLog.Default.WriteLine(String.Format("add force {0} at {1}", entforce, entity.WorldMatrix.Translation));
-				entgrid.Physics.AddForce(MyPhysicsForceType.APPLY_WORLD_FORCE, entforce, entity.WorldMatrix.Translation, Vector3.Zero);
+				// MyLog.Default.WriteLine(String.Format("add force {0} at {1}", entforce, force_pos));
+				entgrid.Physics.AddForce(MyPhysicsForceType.APPLY_WORLD_FORCE, entforce, force_pos, Vector3.Zero);
 			} else {
 				// MyLog.Default.WriteLine(String.Format("don't add force - {0}", entgrid != null));
 			}
@@ -25,7 +36,7 @@ namespace HoverRail {
 			// reaction
 			var cubeGrid = this.cubeBlock.CubeGrid;
 			if (cubeGrid.Physics != null && !cubeGrid.IsStatic) {
-				cubeGrid.Physics.AddForce(MyPhysicsForceType.APPLY_WORLD_FORCE, -entforce, this.cubeBlock.WorldMatrix.Translation, Vector3.Zero);
+				cubeGrid.Physics.AddForce(MyPhysicsForceType.APPLY_WORLD_FORCE, -entforce, force_pos, Vector3.Zero);
 			}
 		}
 		// note: new values must be *ADDED* to guide and weight!
