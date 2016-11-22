@@ -55,7 +55,7 @@ namespace HoverRail {
 			Save(); // euugh
 			if (share && !MyAPIGateway.Multiplayer.IsServer) {
 				var change_message = Encoding.UTF8.GetBytes(String.Format("{0}\n{1}.{2}={3}", CHANGE_MARKER, id, prop, value));
-				MyLog.Default.WriteLine(String.Format("client> {0}={1}", prop, value));
+				MyLog.Default.WriteLine(String.Format("client> {0}.{1}={2}", id, prop, value));
 				MyAPIGateway.Multiplayer.SendMessageToServer(HOVERRAIL_MESSAGE_ID, change_message, true);
 			}
 		}
@@ -88,7 +88,7 @@ namespace HoverRail {
 					// parse 12345.foo=True
 					var pair = change.Split(new char[] {'='}, 2);
 					string key = pair[0], value = pair[1];
-					var prop_id_pair = change.Split(new char[] {'.'}, 2);
+					var prop_id_pair = key.Split(new char[] {'.'}, 2);
 					string id_str = prop_id_pair[0], prop = prop_id_pair[1];
 					long id = Int64.Parse(id_str);
 					SetKey(id, prop, value, false);
