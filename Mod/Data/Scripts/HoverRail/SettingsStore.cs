@@ -96,7 +96,7 @@ namespace HoverRail {
 				if (MyAPIGateway.Multiplayer.IsServer) {
 					var rebroadcast_message = Encoding.UTF8.GetBytes(String.Format("{0}\n{1}", REBROADCAST_MARKER, str_message));
 					// rebroadcast
-					MyLog.Default.WriteLine("server> rebroadcast");
+					// MyLog.Default.WriteLine("server> rebroadcast");
 					MyAPIGateway.Multiplayer.SendMessageToOthers(HOVERRAIL_MESSAGE_ID, rebroadcast_message, true);
 				}
 			}
@@ -138,7 +138,7 @@ namespace HoverRail {
 			Save();
 		}
 		public static void Save() {
-			MyLog.Default.WriteLine("HoverRail saving settings.");
+			// MyLog.Default.WriteLine("HoverRail saving settings.");
 			var builder = new StringBuilder();
 			foreach (var entry in dict) {
 				builder.AppendFormat("[{0}]\n", entry.Key);
@@ -149,7 +149,7 @@ namespace HoverRail {
 			var serialized = builder.ToString();
 			// MyLog.Default.WriteLine(String.Format("DEBUG: {0}", serialized));
 			MyAPIGateway.Utilities.SetVariable(KeyName, serialized);
-			MyLog.Default.WriteLine("HoverRail done saving.");
+			// MyLog.Default.WriteLine("HoverRail done saving.");
 		}
 		// load legacy xml format settings
 		public static void LoadOldSettings(string old_key) {

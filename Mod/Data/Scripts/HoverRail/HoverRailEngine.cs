@@ -13,7 +13,6 @@ using VRage.Utils;
 using VRageMath;
 
 namespace HoverRail {
-	[MyEntityComponentDescriptor(typeof(MyObjectBuilder_TerminalBlock), "HoverRail_Engine_Large")]
 	public class HoverRailEngine : MyGameLogicComponent {
 		const float MAX_POWER_USAGE_MW = 1f;
 		const float FORCE_POWER_COST_MW_N = 0.0000001f;
@@ -203,6 +202,15 @@ namespace HoverRail {
 			return objectBuilder;
 		}
 	}
+	
+	[MyEntityComponentDescriptor(typeof(MyObjectBuilder_TerminalBlock), "HoverRail_Engine_Large")]
+	public class HoverRailEngineLarge : HoverRailEngine {
+	}
+	// small needs a different name in blender than the large engine
+	// but the exporter also appends _Small, so...
+	[MyEntityComponentDescriptor(typeof(MyObjectBuilder_TerminalBlock), "HoverRail_Engine_Small_Small")]
+	public class HoverRailEngineSmall : HoverRailEngine {
+	}
 
 	static class EngineUI {
 		public static bool initialized = false;
@@ -210,7 +218,8 @@ namespace HoverRail {
 		public static IMyTerminalControlOnOffSwitch powerSwitch;
 		
 		public static bool BlockIsEngine(IMyTerminalBlock block) {
-			return block.BlockDefinition.SubtypeId == "HoverRail_Engine_Large";
+			return block.BlockDefinition.SubtypeId == "HoverRail_Engine_Large"
+			    || block.BlockDefinition.SubtypeId == "HoverRail_Engine_Small_Small";
 		}
 		public static float LogRound(float f) {
 			var logbase = Math.Pow(10, Math.Floor(Math.Log10(f)));
@@ -236,6 +245,7 @@ namespace HoverRail {
 			powerSwitch.Tooltip = MyStringId.GetOrCompute("Enable to apply force to stick to the track.");
             powerSwitch.Getter  = b => (bool) SettingsStore.Get(b, "power_on", true);
             powerSwitch.Setter  = (b, v) => SettingsStore.Set(b, "power_on", v);
+			powerSwitch.SupportsMultipleBlocks = true;
 			powerSwitch.OnText  = MyStringId.GetOrCompute("On");
 			powerSwitch.OffText = MyStringId.GetOrCompute("Off");
 			powerSwitch.Visible = BlockIsEngine;

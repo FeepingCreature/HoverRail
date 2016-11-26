@@ -474,5 +474,38 @@
 			<BlockPairName>HoverRail_Engine</BlockPairName>
 			<ExcludedAreaForCamera />
 		</Definition>
+		<Definition xsi:type="MyObjectBuilder_TerminalBlockDefinition">
+			<Id>
+				<TypeId>TerminalBlock</TypeId>
+				<SubtypeId>HoverRail_Engine_Small_Small</SubtypeId>
+			</Id>
+			<DisplayName>HoverRail Maglev Engine</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Engine_Small.dds</Icon>
+			<CubeSize>Small</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="5" y="3" z="5"><X>5</X><Y>3</Y><Z>5</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Engine_Small_Small.mwm</Model>
+			<Components>
+			<Component Subtype="SteelPlate" Count="40" />
+			<Component Subtype="Construction" Count="20" />
+			<Component Subtype="Superconductor" Count="50" />
+			<Component Subtype="Computer" Count="50" />
+			<Component Subtype="SteelPlate" Count="10" />
+			</Components>
+			<CriticalComponent Subtype="Computer" Index="0" />
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+				<MountPoints>
+				<MountPoint Side="Front" StartX="1.00" StartY="0.00" EndX="4.00" EndY="3.00" />
+				<MountPoint Side="Back" StartX="1.00" StartY="0.00" EndX="4.00" EndY="3.00" />
+				<MountPoint Side="Left" StartX="1.00" StartY="0.00" EndX="4.00" EndY="3.00" />
+				<MountPoint Side="Right" StartX="1.00" StartY="0.00" EndX="4.00" EndY="3.00" />
+				<MountPoint Side="Top" StartX="1.00" StartY="1.00" EndX="4.00" EndY="4.00" />
+				</MountPoints>
+			<BlockPairName>HoverRail_Engine</BlockPairName>
+			<ExcludedAreaForCamera />
+		</Definition>
 	</CubeBlocks>
 </Definitions>
