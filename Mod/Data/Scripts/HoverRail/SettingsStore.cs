@@ -53,6 +53,7 @@ namespace HoverRail {
 		public static void SetKey(long id, string prop, string value, bool share = true) {
 			SetKeyInternal(id, prop, value);
 			Save(); // euugh
+			// TODO figure out what about server triggered events?
 			if (share && !MyAPIGateway.Multiplayer.IsServer) {
 				var change_message = Encoding.UTF8.GetBytes(String.Format("{0}\n{1}.{2}={3}", CHANGE_MARKER, id, prop, value));
 				MyLog.Default.WriteLine(String.Format("client> {0}.{1}={2}", id, prop, value));

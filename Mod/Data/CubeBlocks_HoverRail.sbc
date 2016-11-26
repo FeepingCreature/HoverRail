@@ -33,7 +33,21 @@
 				</MountPoints>
 			<BlockPairName>HoverRail_Straight_x1</BlockPairName>
 			<ExcludedAreaForCamera />
-		</Definition>
+			<BlockVariants>
+				<BlockVariant>
+					<TypeId>CubeBlock</TypeId>
+					<SubtypeId>HoverRail_Straight_x3_Large</SubtypeId>
+				</BlockVariant>
+				<BlockVariant>
+					<TypeId>CubeBlock</TypeId>
+					<SubtypeId>HoverRail_Straight_x10_Large</SubtypeId>
+				</BlockVariant>
+				<BlockVariant>
+					<TypeId>CubeBlock</TypeId>
+					<SubtypeId>HoverRail_Straight_x30_Large</SubtypeId>
+				</BlockVariant>
+			</BlockVariants>
+	  </Definition>
 		<Definition>
 			<Id>
 				<TypeId>CubeBlock</TypeId>
@@ -42,6 +56,7 @@
 			<DisplayName>Rail Straight x3</DisplayName>
 			<Icon>Textures\Icons\HoverRail\HoverRail_Straight_x3.dds</Icon>
 			<CubeSize>Large</CubeSize>
+			<GuiVisible>false</GuiVisible>
 			<BlockTopology>TriangleMesh</BlockTopology>
 			<Size x="3" y="1" z="1"><X>3</X><Y>1</Y><Z>1</Z></Size>
 			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
@@ -76,6 +91,7 @@
 			<DisplayName>Rail Straight x10</DisplayName>
 			<Icon>Textures\Icons\HoverRail\HoverRail_Straight_x10.dds</Icon>
 			<CubeSize>Large</CubeSize>
+			<GuiVisible>false</GuiVisible>
 			<BlockTopology>TriangleMesh</BlockTopology>
 			<Size x="10" y="1" z="1"><X>10</X><Y>1</Y><Z>1</Z></Size>
 			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
@@ -110,6 +126,7 @@
 			<DisplayName>Rail Straight x30</DisplayName>
 			<Icon>Textures\Icons\HoverRail\HoverRail_Straight_x30.dds</Icon>
 			<CubeSize>Large</CubeSize>
+			<GuiVisible>false</GuiVisible>
 			<BlockTopology>TriangleMesh</BlockTopology>
 			<Size x="30" y="1" z="1"><X>30</X><Y>1</Y><Z>1</Z></Size>
 			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
@@ -254,6 +271,7 @@
 			<DisplayName>Rail Slope Top x5</DisplayName>
 			<Icon>Textures\Icons\HoverRail\HoverRail_Slope_Top_x5.dds</Icon>
 			<CubeSize>Large</CubeSize>
+			<GuiVisible>false</GuiVisible>
 			<BlockTopology>TriangleMesh</BlockTopology>
 			<Size x="5" y="2" z="1"><X>5</X><Y>2</Y><Z>1</Z></Size>
 			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
@@ -313,6 +331,16 @@
 			<BlockPairName>HoverRail_Slope_x5</BlockPairName>
 			<Center x="0" y="0" z="0" />
 			<ExcludedAreaForCamera />
+			<BlockVariants>
+				<BlockVariant>
+					<TypeId>CubeBlock</TypeId>
+					<SubtypeId>HoverRail_Slope_Top_x5_Large</SubtypeId>
+				</BlockVariant>
+				<BlockVariant>
+					<TypeId>CubeBlock</TypeId>
+					<SubtypeId>HoverRail_Slope_Bottom_x5_Large</SubtypeId>
+				</BlockVariant>
+			</BlockVariants>
 		</Definition>
 		<Definition>
 			<Id>
@@ -322,6 +350,7 @@
 			<DisplayName>Rail Slope Bottom x5</DisplayName>
 			<Icon>Textures\Icons\HoverRail\HoverRail_Slope_Bottom_x5.dds</Icon>
 			<CubeSize>Large</CubeSize>
+			<GuiVisible>false</GuiVisible>
 			<BlockTopology>TriangleMesh</BlockTopology>
 			<Size x="5" y="2" z="1"><X>5</X><Y>2</Y><Z>1</Z></Size>
 			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
