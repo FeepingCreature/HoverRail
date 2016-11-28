@@ -36,15 +36,18 @@ namespace HoverRail {
 			if (!dict.ContainsKey(id)) {
 				// first time seeing this entity
 				// set it up with our Close handler so we remove its settings when it gets removed
-				// (note: we can't use IMyEntity here because id might come from string parsing)
+				// (note: we can't use IMyEntity as a parameter because id might come from string parsing)
 				IMyEntity entity = null;
-				if (!MyAPIGateway.Entities.TryGetEntityById(id, out entity)) {
-					MyLog.Default.WriteLine(String.Format("WARNING: tried to set setting for unknown entity {0}, ignoring", id));
-					return;
+				// only the server has the view of all entities
+				if (MyAPIGateway.Multiplayer.MultiplayerActive && MyAPIGateway.Multiplayer.IsServer) {
+					if (!MyAPIGateway.Entities.TryGetEntityById(id, out entity)) {
+						MyLog.Default.WriteLine(String.Format("WARNING(server): tried to set setting for unknown entity {0}, ignoring", id));
+						return;
+					}
+					entity.OnClose += HandleClose;
 				}
 				dict.Add(id, new Dictionary<string, string>());
 				// MyLog.Default.WriteLine(String.Format("DEBUG: setting up OnClose for {0}", id));
-				entity.OnClose += HandleClose;
 			}
 			var dict2 = dict[id];
 			if (!dict2.ContainsKey(prop)) dict2.Add(prop, value);
