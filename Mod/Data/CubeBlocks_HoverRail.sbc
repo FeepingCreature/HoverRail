@@ -235,6 +235,10 @@
 				<Component Subtype="SteelPlate" Count="36" />
 			</Components>
 			<CriticalComponent Subtype="Girder" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Curved_90_10x-12x_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Curved_90_10x-12x_Large_Constr2.mwm" />
+			</BuildProgressModels>
 			<PhysicsOption>Box</PhysicsOption>
 			<MirroringZ>Y</MirroringZ>
 			<MirroringY>Z</MirroringY>
@@ -421,7 +425,7 @@
 			<MirroringZ>Y</MirroringZ>
 			<MirroringY>Z</MirroringY>
 			<BlockPairName>HoverRail_Junction_Left_10x-12x</BlockPairName>
-			<Center x="0" y="0" z="0" />
+			<Center x="11" y="0" z="0" />
 			<ExcludedAreaForCamera />
 		</Definition>
 		<Definition xsi:type="MyObjectBuilder_TerminalBlockDefinition">
@@ -466,7 +470,7 @@
 				<MountPoint Side="Bottom" StartX="1.20" StartY="6.20" EndX="6.30" EndY="7.80" />
 			</MountPoints>
 			<BlockPairName>HoverRail_Junction_Right_10x-12x</BlockPairName>
-			<Center x="0" y="0" z="11" />
+			<Center x="11" y="0" z="11" />
 			<ExcludedAreaForCamera />
 		</Definition>
 		
@@ -509,7 +513,7 @@
 				<SubtypeId>HoverRail_Engine_Small_Small</SubtypeId>
 			</Id>
 			<DisplayName>HoverRail Maglev Engine</DisplayName>
-			<Icon>Textures\Icons\HoverRail\HoverRail_Engine_Small.dds</Icon>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Engine.dds</Icon>
 			<CubeSize>Small</CubeSize>
 			<BlockTopology>TriangleMesh</BlockTopology>
 			<Size x="5" y="3" z="5"><X>5</X><Y>3</Y><Z>5</Z></Size>

@@ -1,0 +1,25 @@
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<CategoryClasses>
+		<Category xsi:type="MyObjectBuilder_GuiBlockCategoryDefinition">
+		<Id>
+			<TypeId>GuiBlockCategoryDefinition</TypeId>
+			<SubtypeId/>
+		</Id>
+		<DisplayName>+ HoverRail</DisplayName>
+		<Name>HoverRailBlocks</Name>
+		<ItemIds>
+			<string>HoverRail_Straight_x1_Large</string>
+			<string>HoverRail_Straight_x3_Large</string>
+			<string>HoverRail_Straight_x10_Large</string>
+			<string>HoverRail_Straight_x30_Large</string>
+			<string>HoverRail_Curved_90_10x-12x_Large</string>
+			<string>HoverRail_Slope_Top_x5_Large</string>
+			<string>HoverRail_Slope_x5_Large</string>
+			<string>HoverRail_Slope_Bottom_x5_Large</string>
+			<string>HoverRail_Junction_Left_10x-12x_Large</string>
+			<string>HoverRail_Junction_Right_10x-12x_Large</string>
+			<string>HoverRail_Engine_Large</string>
+		</ItemIds>
+		</Category>
+	</CategoryClasses>
+</Definitions>
