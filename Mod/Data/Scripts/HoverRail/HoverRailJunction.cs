@@ -297,28 +297,22 @@ namespace HoverRail {
 		public static IMyTerminalControlOnOffSwitch turnLeftSwitch, turnRightSwitch;
 		public static IMyTerminalAction leftSwitchAction, leftSwitchStraightAction, leftSwitchLeftAction;
 		public static IMyTerminalAction rightSwitchAction, rightSwitchStraightAction, rightSwitchRightAction;
-		// terminal blocks must contain at least one action so that CustomActionGetter is called at all
-		public static IMyTerminalAction HACK;
 		
 		public static void GetSwitchActions(IMyTerminalBlock block, List<IMyTerminalAction> actions) {
-			actions.Remove(HACK);
-			if (BlockIsLeftJunction(block)) {
-				actions.Add(leftSwitchAction);
-				actions.Add(leftSwitchLeftAction);
-				actions.Add(leftSwitchStraightAction);
+			if (!BlockIsLeftJunction(block)) {
+				actions.Remove(leftSwitchAction);
+				actions.Remove(leftSwitchLeftAction);
+				actions.Remove(leftSwitchStraightAction);
 			}
-			if (BlockIsRightJunction(block)) {
-				actions.Add(rightSwitchAction);
-				actions.Add(rightSwitchStraightAction);
-				actions.Add(rightSwitchRightAction);
+			if (!BlockIsRightJunction(block)) {
+				actions.Remove(rightSwitchAction);
+				actions.Remove(rightSwitchStraightAction);
+				actions.Remove(rightSwitchRightAction);
 			}
 		}
 		
 		public static void InitLate() {
 			initialized = true;
-			
-			HACK = MyAPIGateway.TerminalControls.CreateAction<IMyTerminalBlock>("HACK");
-			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(HACK);
 			
             turnLeftSwitch = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlOnOffSwitch, IMyTerminalBlock>("LeftJunction_TurnOnOff");
             turnLeftSwitch.Title   = MyStringId.GetOrCompute("Junction Direction");
@@ -348,36 +342,42 @@ namespace HoverRail {
 			leftSwitchAction.Action = JunctionSwitchAction;
 			// TODO figure out why doesn't work
 			leftSwitchAction.Icon = @"Textures\Icons\HoverRail\HoverRail_Junction_Left_10x-12x_OnOff.dds";
+			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(leftSwitchAction);
 			
 			leftSwitchLeftAction = MyAPIGateway.TerminalControls.CreateAction<IMyTerminalBlock>("HoverRailLeftJunction_Left");
 			leftSwitchLeftAction.Name = new StringBuilder("Go Left");
 			leftSwitchLeftAction.Writer = LeftJunctionText;
 			leftSwitchLeftAction.Action = JunctionSwitchSideAction;
 			leftSwitchLeftAction.Icon = @"Textures\Icons\HoverRail\HoverRail_Junction_Left_10x-12x_On.dds";
+			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(leftSwitchLeftAction);
 			
 			leftSwitchStraightAction = MyAPIGateway.TerminalControls.CreateAction<IMyTerminalBlock>("HoverRailLeftJunction_Straight");
 			leftSwitchStraightAction.Name = new StringBuilder("Go Fwd");
 			leftSwitchStraightAction.Writer = LeftJunctionText;
 			leftSwitchStraightAction.Action = JunctionSwitchStraightAction;
 			leftSwitchStraightAction.Icon = @"Textures\Icons\HoverRail\HoverRail_Junction_Left_10x-12x_Off.dds";
+			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(leftSwitchStraightAction);
 			
 			rightSwitchAction = MyAPIGateway.TerminalControls.CreateAction<IMyTerminalBlock>("HoverRailRightJunction_Switch");
 			rightSwitchAction.Name = new StringBuilder("Switch Direction");
 			rightSwitchAction.Writer = RightJunctionText;
 			rightSwitchAction.Action = JunctionSwitchAction;
 			// rightSwitchAction.Icon = @"Textures\Icons\HoverRail\HoverRail_Junction_Right_10x-12x_OnOff.dds";
+			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(rightSwitchAction);
 			
 			rightSwitchStraightAction = MyAPIGateway.TerminalControls.CreateAction<IMyTerminalBlock>("HoverRailRightJunction_Straight");
 			rightSwitchStraightAction.Name = new StringBuilder("Go Fwd");
 			rightSwitchStraightAction.Writer = RightJunctionText;
 			rightSwitchStraightAction.Action = JunctionSwitchStraightAction;
 			// rightSwitchStraightAction.Icon = @"Textures\Icons\HoverRail\HoverRail_Junction_Right_10x-12x_Off.dds";
+			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(rightSwitchStraightAction);
 			
 			rightSwitchRightAction = MyAPIGateway.TerminalControls.CreateAction<IMyTerminalBlock>("HoverRailRightJunction_Right");
 			rightSwitchRightAction.Name = new StringBuilder("Go Right");
 			rightSwitchRightAction.Writer = RightJunctionText;
 			rightSwitchRightAction.Action = JunctionSwitchSideAction;
 			// rightSwitchRightAction.Icon = @"Textures\Icons\HoverRail\HoverRail_Junction_Right_10x-12x_On.dds";
+			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(rightSwitchRightAction);
 			
 			MyAPIGateway.TerminalControls.CustomActionGetter += GetSwitchActions;
 		}

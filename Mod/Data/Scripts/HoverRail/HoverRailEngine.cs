@@ -216,6 +216,7 @@ namespace HoverRail {
 		public static bool initialized = false;
 		public static IMyTerminalControlSlider forceSlider, heightSlider;
 		public static IMyTerminalControlOnOffSwitch powerSwitch;
+		public static IMyTerminalAction lowerHeightAction, raiseHeightAction;
 		
 		public static bool BlockIsEngine(IMyTerminalBlock block) {
 			return block.BlockDefinition.SubtypeId == "HoverRail_Engine_Large"
@@ -236,6 +237,22 @@ namespace HoverRail {
 			if (f >= 0.0000001) return String.Format("{0}n", Math.Round(f * 1000000, 2));
 			// give up
 			return String.Format("{0}", f);
+		}
+		public static void GetEngineActions(IMyTerminalBlock block, List<IMyTerminalAction> actions) {
+			if (!BlockIsEngine(block)) {
+				actions.Remove(lowerHeightAction);
+				actions.Remove(raiseHeightAction);
+			}
+		}
+		public static void LowerHeightAction(IMyTerminalBlock block) {
+			float height = (float) SettingsStore.Get(block, "height_offset", 1.25f);
+			height = Math.Max(0.1f, (float) Math.Round(height - 0.1f, 1));
+			SettingsStore.Set(block, "height_offset", height);
+		}
+		public static void RaiseHeightAction(IMyTerminalBlock block) {
+			float height = (float) SettingsStore.Get(block, "height_offset", 1.25f);
+			height = Math.Min(2.5f, (float) Math.Round(height + 0.1f, 1));
+			SettingsStore.Set(block, "height_offset", height);
 		}
 		public static void InitLate() {
 			initialized = true;
@@ -272,6 +289,26 @@ namespace HoverRail {
 			heightSlider.Writer  = (b, result) => result.Append(String.Format("{0}m", (float) SettingsStore.Get(b, "height_offset", 1.25f)));
 			heightSlider.Visible = BlockIsEngine;
 			MyAPIGateway.TerminalControls.AddControl<IMyTerminalBlock>(heightSlider);
+			
+			lowerHeightAction = MyAPIGateway.TerminalControls.CreateAction<IMyTerminalBlock>("HoverRailEngine_LowerHeight0.1");
+			lowerHeightAction.Name = new StringBuilder("Lower Height");
+			lowerHeightAction.Action = LowerHeightAction;
+			lowerHeightAction.Writer = (block, builder) => {
+				builder.Clear();
+				builder.Append(String.Format("{0} -", (float) SettingsStore.Get(block, "height_offset", 1.25f)));
+			};
+			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(lowerHeightAction);
+			
+			raiseHeightAction = MyAPIGateway.TerminalControls.CreateAction<IMyTerminalBlock>("HoverRailEngine_RaiseHeight0.1");
+			raiseHeightAction.Name = new StringBuilder("Raise Height");
+			raiseHeightAction.Action = RaiseHeightAction;
+			raiseHeightAction.Writer = (block, builder) => {
+				builder.Clear();
+				builder.Append(String.Format("{0} +", (float) SettingsStore.Get(block, "height_offset", 1.25f)));
+			};
+			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(raiseHeightAction);
+			
+			MyAPIGateway.TerminalControls.CustomActionGetter += GetEngineActions;
 		}
 	}
 }
