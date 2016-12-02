@@ -137,6 +137,8 @@ namespace HoverRail {
 				// not confident in our rail lock, look for possible new rails
 				var area = new BoundingSphereD(searchCenter, 2.5);
 				var items = MyAPIGateway.Entities.GetEntitiesInSphere(ref area);
+				rail_pos = Vector3D.Zero;
+				weight_sum = 0.0f;
 				foreach (var ent in items) {
 					var guide = RailGuide.fromEntity(ent);
 					if (guide != null) {
@@ -160,7 +162,9 @@ namespace HoverRail {
 			
 			var guidance = rail_pos - hoverCenter;
 			// MyLog.Default.WriteLine(String.Format("{0}: rail pos is {1}, due to weight correction by {2}; guidance {3}", Entity.EntityId, rail_pos, weight_sum, guidance));
-			DebugDraw.Sphere(rail_pos, (float) guidance.Length(), Color.Blue);
+			DebugDraw.Sphere(rail_pos, 0.15f, Color.Blue);
+			DebugDraw.Sphere(rail_pos * 0.5 + hoverCenter * 0.5, 0.1f, Color.Blue);
+			DebugDraw.Sphere(hoverCenter, 0.1f, Color.Blue);
 			
 			// DebugDraw.Sphere(searchCenter, 0.1f, Color.Green);
 			
@@ -177,7 +181,7 @@ namespace HoverRail {
 					var factor = Math.Pow(weight, 2.0); // spiken
 					var guidanceForce = forceLimit * Vector3D.Normalize(guidance) * factor;
 					this.avgCorrectF.update(guidanceForce);
-					DebugDraw.Sphere(searchCenter + this.avgCorrectF.value * 0.000001f, 0.1f, Color.Yellow);
+					DebugDraw.Sphere(searchCenter, 0.1f, Color.Yellow);
 					anyRailGuide.applyForces(Entity, this.avgCorrectF.value * power_ratio);
 					force_magnitude += (float) this.avgCorrectF.value.Length();
 				}

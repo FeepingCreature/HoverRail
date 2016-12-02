@@ -13,26 +13,28 @@ namespace HoverRail {
 		public StraightRailGuide(IMyCubeBlock cubeBlock, float halfsize) : base(cubeBlock) { this.halfsize = halfsize; }
 		// also used in sloped rail
 		public static bool straight_guidance(float halfsize, MatrixD cubeMatrix, Vector3D localCoords,
-			ref Vector3D guide, ref float weight, float height
+			ref Vector3D guide, ref float weight, float height,
+			bool apply_overhang = true
 		) {
 			localCoords.Y -= height - 1.25;
-			var overhang = StraightRailConstants.OVERHANG;
+			var overhang = (apply_overhang?StraightRailConstants.OVERHANG:0);
 			if (localCoords.X < -halfsize - overhang || localCoords.X > halfsize + overhang) return false; // outside the box
 			if (localCoords.Y < -1.25 || localCoords.Y > 2.60) return false; // some leeway above TODO lower
 			if (localCoords.Z < -1.25 || localCoords.Z > 1.25) return false; // outside the box
 			
 			float myWeight;
 			const float underhang = 1.5f; // start transition early
-			const float HANG = StraightRailConstants.OVERHANG + underhang;
+			float hang = overhang + underhang;
 			float transitionStart = halfsize - underhang;
 			if (localCoords.X < -transitionStart || localCoords.X > transitionStart) {
 				// influence goes down to 0 
-				myWeight = (float) ((HANG - (float) (Math.Abs(localCoords.X) - transitionStart)) / HANG);
+				myWeight = (float) ((hang - (float) (Math.Abs(localCoords.X) - transitionStart)) / hang);
 			} else {
 				myWeight = 1.0f;
 			}
 			
 			var localRail = new Vector3D(localCoords.X, height - 1.25, 0);
+			// DebugDraw.Sphere(Vector3D.Transform(localRail, cubeMatrix), 0.2f, Color.Red);
 			weight += myWeight;
 			guide += Vector3D.Transform(localRail, cubeMatrix) * myWeight;
 			return true;

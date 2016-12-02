@@ -90,9 +90,6 @@ namespace HoverRail {
 		protected MatrixD junction_to_straight_outer_short, straight_outer_short_to_junction;
 		protected MatrixD junction_to_straight_inner_long, straight_inner_long_to_junction;
 		protected MatrixD junction_to_straight_outer_long, straight_outer_long_to_junction;
-		// the "danger hole" is the part of the rail where curved and straight cross
-		// around that point, we don't apply any guide except Y (guide=pos) and rely on the other rail to hold us steady.
-		protected Vector3D dangerhole;
 		// form a line separating the "straight/left turns area" from the "swivel area"
 		protected Vector3D divider_pt1, divider_pt2;
 		// names of the swivel subparts
@@ -100,40 +97,27 @@ namespace HoverRail {
 		// the right junction uses a z-flipped curve piece
 		protected bool flip_curve_z = false;
 		// pick between curved guide and straight guide
-		public static void pick_appropriate_guides(Vector3D pos, Vector3D local_pos, Vector3D dangerhole,
+		public static void pick_appropriate_guides(Vector3D pos, Vector3D local_pos,
 		                                           ref MatrixD worldMat, ref MatrixD worldMatInv,
 		                                           Vector3D guide1, float weight1,
 												   Vector3D guide2, float weight2,
+												   out bool first_guide_was_picked,
 												   ref Vector3D guide, ref float weight
 		) {
+			first_guide_was_picked = false;
 			if (weight1 == 0 && weight2 == 0) return;
-			
-			var dangerdir = local_pos - dangerhole;
-			dangerdir.Y = 0; // only look at planar distance
-			var dangerdist = dangerdir.Length(); // distance from dangerhole
-			var danger = (float) Math.Pow(Math.Max(0, 1 - dangerdist / 2.0), 0.1); // almost one block radius
-			// MyLog.Default.WriteLine(String.Format("dangerdist {0}, danger {1}", dangerdist, danger));
 			
 			if (weight1 == 0) {
 				// MyLog.Default.WriteLine("only guide 2!");
-				guide2 /= weight2;
-				var guide2_local = Vector3D.Transform(guide2, worldMatInv);
-				var only_y_correction2 = Vector3D.Transform(new Vector3D(local_pos.X, guide2_local.Y, local_pos.Z), worldMat);
-				guide2 = guide2 * (1 - danger) + only_y_correction2 * danger;
-				weight2 = weight2 * (1 - danger) + danger;
-				guide += guide2 * weight2;
+				guide += guide2;
 				weight += weight2;
 				return;
 			}
 			if (weight2 == 0) {
 				// MyLog.Default.WriteLine("only guide 1!");
-				guide1 /= weight1;
-				var guide1_local = Vector3D.Transform(guide1, worldMatInv);
-				var only_y_correction1 = Vector3D.Transform(new Vector3D(local_pos.X, guide1_local.Y, local_pos.Z), worldMat);
-				guide1 = guide1 * (1 - danger) + only_y_correction1 * danger;
-				weight1 = weight1 * (1 - danger) + danger;
-				guide += guide1 * weight1;
+				guide += guide1;
 				weight += weight1;
+				first_guide_was_picked = true;
 				return;
 			}
 			guide1 /= weight1;
@@ -141,23 +125,14 @@ namespace HoverRail {
 			var dist1 = (float) (pos - guide1).Length();
 			var dist2 = (float) (pos - guide2).Length();
 			var fac = dist1 / (dist1 + dist2);
-			// sharp decision between straight and curved
-			// this is safe because we use the danger hole to mask out the actual crossing
-			if (fac > 0.5) fac = 1;
-			else fac = 0;
+			// sharp snapping - this is safe cause the center rails will be Y-only
+			if (fac < 0.5) fac = 0;
+			else fac = 1;
 			// MyLog.Default.WriteLine(String.Format("interpolating {0}, {1} around {2}: fac {3}", guide1, guide2, pos, fac));
 			Vector3D mix_guide = guide1 * (1 - fac) + guide2 * fac;
 			float mix_weight = weight1 * (1 - fac) + weight2 * fac;
 			
-			var mixguide_local = Vector3D.Transform(mix_guide, worldMatInv);
-			var only_y_correction_local = new Vector3D(local_pos.X, mixguide_local.Y, local_pos.Z);
-			var only_y_correction = Vector3D.Transform(only_y_correction_local, worldMat);
-			// MyLog.Default.WriteLine(String.Format("danger of {0}: y correction guide at {1}, vs. mixguide at {2}", danger, only_y_correction, mix_guide));
-			// MyLog.Default.WriteLine(String.Format("in local terms: y correction guide at {0}, vs. mixguide at {1}", only_y_correction_local, mixguide_local));
-			
-			mix_guide = mix_guide * (1 - danger) + only_y_correction * danger;
-			mix_weight = mix_weight * (1 - danger) + danger;
-			
+			first_guide_was_picked = fac < 0.5;
 			guide += mix_guide * mix_weight;
 			weight += mix_weight;
 		}
@@ -181,11 +156,13 @@ namespace HoverRail {
 					curveCoords *= invZ;
 					MatrixD.Rescale(ref curveWorldMat, ref /* WHY */ invZ);
 				}
+				bool outer_curve_was_picked;
 				Curve90_10x_12x_RailGuide.curved_guidance(
 					curveCoords,
 					curveWorldMat,
-					false,
-					ref curve_guide, ref curve_weight, height
+					out outer_curve_was_picked,
+					ref curve_guide, ref curve_weight, height,
+					lean: false
 				);
 				Vector3D straight_guide = new Vector3D(); float straight_weight = 0.0f;
 				StraightRailGuide.straight_guidance(
@@ -194,21 +171,34 @@ namespace HoverRail {
 					Vector3D.Transform(localCoords, junction_to_straight_outer_long),
 					ref straight_guide, ref straight_weight, height
 				);
-				StraightRailGuide.straight_guidance(
+				bool inner_straight_was_picked = StraightRailGuide.straight_guidance(
 					8*1.25f,
 					straight_inner_long_to_junction * this.cubeBlock.WorldMatrix,
 					Vector3D.Transform(localCoords, junction_to_straight_inner_long),
 					ref straight_guide, ref straight_weight, height
 				);
-				float picked_weight = 0;
+				Vector3D picked_guide = Vector3D.Zero; float picked_weight = 0;
 				MatrixD worldMat = this.cubeBlock.WorldMatrix, worldMatInv = this.cubeBlock.WorldMatrixNormalizedInv;
+				bool curve_guide_was_picked;
 				pick_appropriate_guides(
-					pos, localCoords, dangerhole,
+					pos, localCoords,
 					ref worldMat, ref worldMatInv,
 					curve_guide, curve_weight,
 					straight_guide, straight_weight,
-					ref guide, ref picked_weight
+					out curve_guide_was_picked,
+					ref picked_guide, ref picked_weight
 				);
+				// DebugDraw.Sphere(picked_guide / picked_weight, 0.2f, Color.Yellow);
+				// inner rails are "passive" (meaning they only apply Y correction)
+				// if they are active, we rely on the outer rail for XZ guidance
+				// (but we still have to do the pick process so we don't break the snapping)
+				if ( curve_guide_was_picked && outer_curve_was_picked
+				 || !curve_guide_was_picked && inner_straight_was_picked
+				) {
+					picked_guide = new Vector3D(localCoords.X, height - 1.25, localCoords.Z);
+					picked_guide = Vector3D.Transform(picked_guide, worldMat) * picked_weight;
+				}
+				guide += picked_guide;
 				weight += picked_weight;
 				tracking |= picked_weight > 0;
 			}
@@ -240,13 +230,15 @@ namespace HoverRail {
 				1.25f,
 				straight_outer_short_to_junction * this.cubeBlock.WorldMatrix,
 				Vector3D.Transform(localCoords, junction_to_straight_outer_short),
-				ref guide, ref weight, height
+				ref guide, ref weight, height,
+				apply_overhang: false
 			);
 			tracking |= StraightRailGuide.straight_guidance(
 				1.25f,
 				straight_inner_short_to_junction * this.cubeBlock.WorldMatrix,
 				Vector3D.Transform(localCoords, junction_to_straight_inner_short),
-				ref guide, ref weight, height
+				ref guide, ref weight, height,
+				apply_overhang: false
 			);
 			return tracking;
 		}
@@ -265,7 +257,6 @@ namespace HoverRail {
 			swivel_short = "jl_swivel_left";
 			swivel_long = "jl_swivel_right";
 			// see blender
-			dangerhole = new Vector3D(-4, 0, -8.75);
 			divider_pt1 = new Vector3D(6, 0, -8.5);
 			divider_pt2 = new Vector3D(3.5, 0, -13);
 			flip_curve_z = false;
@@ -285,7 +276,6 @@ namespace HoverRail {
 			swivel_short = "jr_swivel_right";
 			swivel_long = "jr_swivel_left";
 			// see blender
-			dangerhole = new Vector3D(-4, 0, 8.75);
 			divider_pt1 = new Vector3D(3.5, 0, 13);
 			divider_pt2 = new Vector3D(6, 0, 8.5);
 			flip_curve_z = true;
