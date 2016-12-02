@@ -21,7 +21,7 @@ namespace HoverRail {
 		MyResourceSinkComponent sinkComp;
 		bool block_initialized = false;
         public override void Init(Sandbox.Common.ObjectBuilders.MyObjectBuilder_EntityBase objectBuilder) {
-			this.avgGuidance = new SlidingAverageVector(0.2);
+			this.avgGuidance = new SlidingAverageVector(0.3);
 			this.avgCorrectF = new SlidingAverageVector(0.9);
 			this.avgDampenF = new SlidingAverageVector(0.9);
 			Entity.NeedsUpdate |= MyEntityUpdateEnum.EACH_FRAME;
@@ -217,6 +217,7 @@ namespace HoverRail {
 		public static IMyTerminalControlSlider forceSlider, heightSlider;
 		public static IMyTerminalControlOnOffSwitch powerSwitch;
 		public static IMyTerminalAction lowerHeightAction, raiseHeightAction;
+		public static IMyTerminalAction turnOnAction, turnOffAction, turnOnOffAction;
 		
 		public static bool BlockIsEngine(IMyTerminalBlock block) {
 			return block.BlockDefinition.SubtypeId == "HoverRail_Engine_Large"
@@ -242,6 +243,9 @@ namespace HoverRail {
 			if (!BlockIsEngine(block)) {
 				actions.Remove(lowerHeightAction);
 				actions.Remove(raiseHeightAction);
+				actions.Remove(turnOnAction);
+				actions.Remove(turnOffAction);
+				actions.Remove(turnOnOffAction);
 			}
 		}
 		public static void LowerHeightAction(IMyTerminalBlock block) {
@@ -254,6 +258,20 @@ namespace HoverRail {
 			height = Math.Min(2.5f, (float) Math.Round(height + 0.1f, 1));
 			SettingsStore.Set(block, "height_offset", height);
 		}
+		public static void TurnOnAction(IMyTerminalBlock block) {
+			SettingsStore.Set(block, "power_on", true);
+		}
+		public static void TurnOffAction(IMyTerminalBlock block) {
+			SettingsStore.Set(block, "power_on", false);
+		}
+		public static void TurnOnOffAction(IMyTerminalBlock block) {
+			SettingsStore.Set(block, "power_on", !SettingsStore.Get(block, "power_on", true));
+		}
+		public static void OnOffWriter(IMyTerminalBlock block, StringBuilder builder) {
+			builder.Clear();
+			builder.Append(((bool) SettingsStore.Get(block, "power_on", true))?"On":"Off");
+		}
+		
 		public static void InitLate() {
 			initialized = true;
 			
@@ -271,7 +289,7 @@ namespace HoverRail {
 			forceSlider = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlSlider, IMyTerminalBlock>( "HoverRail_ForceLimit" );
 			forceSlider.Title   = MyStringId.GetOrCompute("Force Limit");
 			forceSlider.Tooltip = MyStringId.GetOrCompute("The amount of force applied to align this motor with the track.");
-			forceSlider.SetLogLimits(10000.0f, 30000000.0f);
+			forceSlider.SetLogLimits(10000.0f, 50000000.0f);
 			forceSlider.SupportsMultipleBlocks = true;
 			forceSlider.Getter  = b => (float) SettingsStore.Get(b, "force_slider", 100000.0f);
 			forceSlider.Setter  = (b, v) => SettingsStore.Set(b, "force_slider", (float) LogRound(v));
@@ -307,6 +325,24 @@ namespace HoverRail {
 				builder.Append(String.Format("{0} +", (float) SettingsStore.Get(block, "height_offset", 1.25f)));
 			};
 			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(raiseHeightAction);
+			
+			turnOnAction = MyAPIGateway.TerminalControls.CreateAction<IMyTerminalBlock>("HoverRailEngine_On");
+			turnOnAction.Name = new StringBuilder("Power On");
+			turnOnAction.Action = TurnOnAction;
+			turnOnAction.Writer = OnOffWriter;
+			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(turnOnAction);
+			
+			turnOffAction = MyAPIGateway.TerminalControls.CreateAction<IMyTerminalBlock>("HoverRailEngine_Off");
+			turnOffAction.Name = new StringBuilder("Power Off");
+			turnOffAction.Action = TurnOffAction;
+			turnOffAction.Writer = OnOffWriter;
+			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(turnOffAction);
+			
+			turnOnOffAction = MyAPIGateway.TerminalControls.CreateAction<IMyTerminalBlock>("HoverRailEngine_OnOff");
+			turnOnOffAction.Name = new StringBuilder("Power On/Off");
+			turnOnOffAction.Action = TurnOnOffAction;
+			turnOnOffAction.Writer = OnOffWriter;
+			MyAPIGateway.TerminalControls.AddAction<IMyTerminalBlock>(turnOnOffAction);
 			
 			MyAPIGateway.TerminalControls.CustomActionGetter += GetEngineActions;
 		}
