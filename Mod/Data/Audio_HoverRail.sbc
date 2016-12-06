@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<Definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Sounds>
+    <Sound>
+      <Id>
+        <TypeId>MyObjectBuilder_AudioDefinition</TypeId>
+        <SubtypeId>HoverEngine_Startup</SubtypeId>
+      </Id>
+      <Category>SHIP</Category>
+      <MaxDistance>200</MaxDistance>
+      <Volume>1.00</Volume>
+      <RealisticFilter>realShipFilter</RealisticFilter>
+      <RealisticVolumeChange>0.6</RealisticVolumeChange>
+      <Waves>
+        <Wave Type="D3">
+          <Start>Audio\REAL\HoverRail\HoverRail_EngineHumStart.xwm</Start>
+        </Wave>
+      </Waves>
+    </Sound>
+    <Sound>
+      <Id>
+        <TypeId>MyObjectBuilder_AudioDefinition</TypeId>
+        <SubtypeId>HoverEngine_Loop</SubtypeId>
+      </Id>
+      <Category>SHIP</Category>
+      <MaxDistance>200</MaxDistance>
+      <Volume>1.00</Volume>
+      <Loopable>true</Loopable>
+      <RealisticFilter>realShipFilter</RealisticFilter>
+      <RealisticVolumeChange>0.6</RealisticVolumeChange>
+      <Waves>
+        <Wave Type="D3">
+          <Loop>Audio\REAL\HoverRail\HoverRail_EngineHumLoop.xwm</Loop>
+        </Wave>
+      </Waves>
+    </Sound>
+  </Sounds>
+</Definitions>

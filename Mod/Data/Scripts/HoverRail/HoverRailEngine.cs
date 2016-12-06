@@ -9,6 +9,7 @@ using Sandbox.Game.EntityComponents;
 using Sandbox.Common.ObjectBuilders;
 using Sandbox.Common.Components;
 using VRage.Game;
+using VRage.Game.Entity;
 using VRage.Utils;
 using VRageMath;
 
@@ -20,6 +21,8 @@ namespace HoverRail {
 		SlidingAverageVector avgGuidance, avgCorrectF, avgDampenF;
 		MyResourceSinkComponent sinkComp;
 		bool block_initialized = false;
+		MyEntity3DSoundEmitter engine_sound;
+		MySoundPair sound_engine_start, sound_engine_loop;
         public override void Init(Sandbox.Common.ObjectBuilders.MyObjectBuilder_EntityBase objectBuilder) {
 			this.avgGuidance = new SlidingAverageVector(0.3);
 			this.avgCorrectF = new SlidingAverageVector(0.9);
@@ -28,6 +31,12 @@ namespace HoverRail {
 			this.objectBuilder = objectBuilder;
 			this.id = HoverRailEngine.attachcount++;
 			this.activeRailGuides = new HashSet<RailGuide>();
+			this.sound_engine_start = new MySoundPair("HoverEngine_Startup");
+			this.sound_engine_loop = new MySoundPair("HoverEngine_Loop");
+			MyEntity3DSoundEmitter.PreloadSound(sound_engine_start);
+			MyEntity3DSoundEmitter.PreloadSound(sound_engine_loop);
+			this.engine_sound = new MyEntity3DSoundEmitter(Entity as VRage.Game.Entity.MyEntity);
+			this.engine_sound.Force3D = true;
 			// MyLog.Default.WriteLine(String.Format("ATTACH TO OBJECT {0}", this.id));
 			InitPowerComp();
 		}
@@ -67,6 +76,7 @@ namespace HoverRail {
 		public void UpdatePowerUsage(float new_power) {
 			if (power_usage == new_power) return;
 			power_ratio_available = 1.0f;
+			engine_sound.CustomVolume = (float) (1.0 + new_power * 10); // 100KW = 100% volume
 			if (new_power > MAX_POWER_USAGE_MW) {
 				power_ratio_available = MAX_POWER_USAGE_MW / new_power;
 				new_power = MAX_POWER_USAGE_MW;
@@ -84,8 +94,32 @@ namespace HoverRail {
 		static int attachcount;
 		int id;
 		private int frame = 0;
+		private bool last_power_state = false;
 		
 		HashSet<RailGuide> activeRailGuides;
+		
+		void QueueLoopSound(MyEntity3DSoundEmitter emitter) {
+			emitter.StoppedPlaying -= QueueLoopSound;
+			emitter.PlaySingleSound(sound_engine_loop, true);
+		}
+		public void UpdatePowerState(bool state_on) {
+			bool state_changed = last_power_state != state_on;
+			last_power_state = state_on;
+			
+			if (state_on == false) {
+				if (state_changed) {
+					engine_sound.StoppedPlaying -= QueueLoopSound;
+					engine_sound.StopSound(true);
+				}
+			} else {
+				if (state_changed || !engine_sound.IsPlaying) {
+					engine_sound.StoppedPlaying -= QueueLoopSound;
+					engine_sound.StopSound(true); // ... why??
+					engine_sound.PlaySingleSound(sound_engine_start, true);
+					engine_sound.StoppedPlaying += QueueLoopSound;
+				}
+			}
+		}
 		
 		public override void UpdateBeforeSimulation() {
 			if (!block_initialized) InitLate();
@@ -96,6 +130,7 @@ namespace HoverRail {
 			
 			if (!(bool) SettingsStore.Get(Entity, "power_on", true)) {
 				UpdatePowerUsage(0);
+				UpdatePowerState(false);
 				return;
 			}
 			
@@ -154,6 +189,7 @@ namespace HoverRail {
 			// MyLog.Default.WriteLine(String.Format("{0}:- hovering at {1}", Entity.EntityId, hoverCenter));
 			if (activeRailGuides.Count == 0) {
 				UpdatePowerUsage(0);
+				UpdatePowerState(true); // powered but idle
 				return;
 			}
 			
@@ -201,6 +237,7 @@ namespace HoverRail {
 			}
 			this.avgGuidance.update(guidance);
 			UpdatePowerUsage(force_magnitude * FORCE_POWER_COST_MW_N);
+			UpdatePowerState(true);
 		}
 		public override MyObjectBuilder_EntityBase GetObjectBuilder(bool copy = false) {
 			return objectBuilder;
