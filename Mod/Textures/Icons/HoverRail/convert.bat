@@ -18,6 +18,18 @@ copy HoverRail_Curved_90_10x-12x0000.png HoverRail_Curved_90_10x-12x.png
 texconv HoverRail_Curved_90_10x-12x.png
 del HoverRail_Curved_90_10x-12x.png
 
+copy HoverRail_Curved_90_3x0000.png HoverRail_Curved_90_3x.png
+texconv HoverRail_Curved_90_3x.png
+del HoverRail_Curved_90_3x.png
+
+copy HoverRail_Curved_90_5x0000.png HoverRail_Curved_90_5x.png
+texconv HoverRail_Curved_90_5x.png
+del HoverRail_Curved_90_5x.png
+
+copy HoverRail_Curved_90_7x0000.png HoverRail_Curved_90_7x.png
+texconv HoverRail_Curved_90_7x.png
+del HoverRail_Curved_90_7x.png
+
 copy HoverRail_Engine0000.png HoverRail_Engine.png
 texconv HoverRail_Engine.png
 del HoverRail_Engine.png

@@ -266,6 +266,108 @@
 			<Center x="0" y="0" z="0" />
 			<ExcludedAreaForCamera />
 		</Definition>
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Curved_90_3x_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Curved 90° x3</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Curved_90_3x.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="3" y="1" z="3"><X>3</X><Y>1</Y><Z>3</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Curved_90_3x_Large.mwm</Model>
+			<!-- factor of 4 -->
+			<Components>
+				<Component Subtype="SteelPlate" Count="4" />
+				<Component Subtype="Girder" Count="32" />
+				<Component Subtype="SteelPlate" Count="4" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Curved_90_3x_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Curved_90_3x_Large_Constr2.mwm" />
+			</BuildProgressModels>
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+			<MountPoints>
+				<MountPoint Side="Back" StartX="0.18" StartY="-0.05" EndX="0.82" EndY="0.15" />
+				<MountPoint Side="Right" StartX="2.20" StartY="-0.04" EndX="2.80" EndY="0.14" />
+			</MountPoints>
+			<BlockPairName>HoverRail_Curved_90_3x</BlockPairName>
+			<Center x="0" y="0" z="0" />
+			<ExcludedAreaForCamera />
+		</Definition>
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Curved_90_5x_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Curved 90° x5</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Curved_90_5x.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="5" y="1" z="5"><X>5</X><Y>1</Y><Z>5</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Curved_90_5x_Large.mwm</Model>
+			<!-- factor of 7 -->
+			<Components>
+				<Component Subtype="SteelPlate" Count="7" />
+				<Component Subtype="Girder" Count="56" />
+				<Component Subtype="SteelPlate" Count="7" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Curved_90_5x_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Curved_90_5x_Large_Constr2.mwm" />
+			</BuildProgressModels>
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+			<MountPoints>
+				<MountPoint Side="Back" StartX="0.20" StartY="-0.01" EndX="0.80" EndY="0.15" />
+				<MountPoint Side="Right" StartX="4.22" StartY="-0.01" EndX="4.78" EndY="0.15" />
+			</MountPoints>
+			<BlockPairName>HoverRail_Curved_90_5x</BlockPairName>
+			<Center x="0" y="0" z="0" />
+			<ExcludedAreaForCamera />
+		</Definition>
+		<Definition>
+			<Id>
+				<TypeId>CubeBlock</TypeId>
+				<SubtypeId>HoverRail_Curved_90_7x_Large</SubtypeId>
+			</Id>
+			<DisplayName>Rail Curved 90° x7</DisplayName>
+			<Icon>Textures\Icons\HoverRail\HoverRail_Curved_90_7x.dds</Icon>
+			<CubeSize>Large</CubeSize>
+			<BlockTopology>TriangleMesh</BlockTopology>
+			<Size x="7" y="1" z="7"><X>7</X><Y>1</Y><Z>7</Z></Size>
+			<ModelOffset x="0" y="0" z="0"><X>0</X><Y>0</Y><Z>0</Z></ModelOffset>
+			<Model>Models\HoverRail\HoverRail_Curved_90_7x_Large.mwm</Model>
+			<!-- factor of 10 -->
+			<Components>
+				<Component Subtype="SteelPlate" Count="10" />
+				<Component Subtype="Girder" Count="80" />
+				<Component Subtype="SteelPlate" Count="10" />
+			</Components>
+			<CriticalComponent Subtype="Girder" Index="0" />
+			<BuildProgressModels>
+				<Model BuildPercentUpperBound="0.50" File="Models\HoverRail\HoverRail_Curved_90_7x_Large_Constr1.mwm" />
+				<Model BuildPercentUpperBound="1.00" File="Models\HoverRail\HoverRail_Curved_90_7x_Large_Constr2.mwm" />
+			</BuildProgressModels>
+			<PhysicsOption>Box</PhysicsOption>
+			<MirroringZ>Y</MirroringZ>
+			<MirroringY>Z</MirroringY>
+			<MountPoints>
+				<MountPoint Side="Back" StartX="0.15" StartY="-0.03" EndX="0.75" EndY="0.15" />
+				<MountPoint Side="Right" StartX="6.25" StartY="-0.05" EndX="6.85" EndY="0.15" />
+			</MountPoints>
+			<BlockPairName>HoverRail_Curved_90_7x</BlockPairName>
+			<Center x="0" y="0" z="0" />
+			<ExcludedAreaForCamera />
+		</Definition>
 
 		<Definition>
 			<Id>
@@ -383,9 +485,9 @@
 			<Center x="0" y="0" z="0" />
 			<ExcludedAreaForCamera />
 		</Definition>
-		<Definition xsi:type="MyObjectBuilder_TerminalBlockDefinition">
+		<Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
 			<Id>
-				<TypeId>TerminalBlock</TypeId>
+				<TypeId>UpgradeModule</TypeId>
 				<SubtypeId>HoverRail_Junction_Left_10x-12x_Large</SubtypeId>
 			</Id>
 			<DisplayName>Rail Junction Left x10-x12</DisplayName>
@@ -428,9 +530,9 @@
 			<Center x="11" y="0" z="0" />
 			<ExcludedAreaForCamera />
 		</Definition>
-		<Definition xsi:type="MyObjectBuilder_TerminalBlockDefinition">
+		<Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
 			<Id>
-				<TypeId>TerminalBlock</TypeId>
+				<TypeId>UpgradeModule</TypeId>
 				<SubtypeId>HoverRail_Junction_Right_10x-12x_Large</SubtypeId>
 			</Id>
 			<DisplayName>Rail Junction Right x10-x12</DisplayName>
@@ -474,9 +576,9 @@
 			<ExcludedAreaForCamera />
 		</Definition>
 		
-		<Definition xsi:type="MyObjectBuilder_TerminalBlockDefinition">
+		<Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
 			<Id>
-				<TypeId>TerminalBlock</TypeId>
+				<TypeId>UpgradeModule</TypeId>
 				<SubtypeId>HoverRail_Engine_Large</SubtypeId>
 			</Id>
 			<DisplayName>HoverRail Maglev Engine</DisplayName>
@@ -507,9 +609,9 @@
 			<BlockPairName>HoverRail_Engine</BlockPairName>
 			<ExcludedAreaForCamera />
 		</Definition>
-		<Definition xsi:type="MyObjectBuilder_TerminalBlockDefinition">
+		<Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
 			<Id>
-				<TypeId>TerminalBlock</TypeId>
+				<TypeId>UpgradeModule</TypeId>
 				<SubtypeId>HoverRail_Engine_Small_Small</SubtypeId>
 			</Id>
 			<DisplayName>HoverRail Maglev Engine</DisplayName>
