@@ -358,7 +358,7 @@ namespace HoverRail
             forceSlider = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlSlider, IMyUpgradeModule>("HoverRail_ForceLimit");
             forceSlider.Title = MyStringId.GetOrCompute("Force Limit");
             forceSlider.Tooltip = MyStringId.GetOrCompute("The amount of force applied to align this motor with the track.");
-            forceSlider.SetLogLimits(10000.0f, 50000000.0f);
+            forceSlider.SetLogLimits(10000.0f, 300000000.0f);
             forceSlider.SupportsMultipleBlocks = true;
             forceSlider.Getter = b => (float)SettingsStore.Get(b, "force_slider", 100000.0f);
             forceSlider.Setter = (b, v) => SettingsStore.Set(b, "force_slider", (float)LogRound(v));
