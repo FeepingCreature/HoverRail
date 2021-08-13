@@ -61,7 +61,8 @@ namespace HoverRail
                 sinkComp.Init(
                     MyStringHash.GetOrCompute("Thrust"),
                     MAX_POWER_USAGE_MW,
-                    GetCurrentPowerDraw
+                    GetCurrentPowerDraw,
+                    (MyCubeBlock)Entity
                 );
                 Entity.Components.Add(sinkComp);
             }
